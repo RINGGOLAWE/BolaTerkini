@@ -1,242 +1,278 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BolaTerkini - Berita Sepak Bola</title>
-<meta name="description" content="Portal berita sepak bola terkini Indonesia dan dunia.">
+<meta name="description" content="Berita sepak bola Indonesia dan dunia.">
 
 <style>
 :root {
-  --navy: #101d35;
-  --navy2: #192b49;
-  --gold: #e7b84b;
-  --light: #f4f6fa;
-  --text: #202b3c;
-  --muted: #718096;
+  --navy:#101d35;
+  --navy2:#192b49;
+  --gold:#e7b84b;
+  --light:#f4f6fa;
+  --text:#202b3c;
+  --muted:#718096;
 }
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--light);
-  color: var(--text);
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--light);
+  color:var(--text);
 }
-button, input, textarea, select { font: inherit; }
-.header {
-  background: var(--navy);
-  color: white;
-  padding: 18px 5%;
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.header{
+  background:var(--navy);
+  color:white;
+  padding:18px 5%;
 }
-.header-content {
-  max-width: 1200px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
+.header-content{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-.logo {
-  font-size: 27px;
-  font-weight: 800;
-  color: var(--gold);
+.logo{
+  font-size:28px;
+  font-weight:900;
+  color:var(--gold);
 }
-.logo span { color: white; }
-.admin-button {
-  background: var(--gold);
-  border: 0;
-  border-radius: 7px;
-  padding: 11px 18px;
-  font-weight: bold;
-  cursor: pointer;
+.logo span{color:white}
+.admin-button{
+  background:var(--gold);
+  color:var(--navy);
+  border:0;
+  border-radius:7px;
+  padding:12px 20px;
+  font-weight:bold;
 }
-.navbar { background: var(--navy2); }
-.nav-content {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 5%;
-  display: flex;
-  gap: 24px;
-  overflow-x: auto;
+.admin-button:hover{background:#ffd36d}
+
+.navbar{background:var(--navy2)}
+.nav-content{
+  max-width:1200px;
+  margin:auto;
+  padding:0 5%;
+  display:flex;
+  gap:25px;
+  overflow-x:auto;
 }
-.nav-content a {
-  color: white;
-  text-decoration: none;
-  padding: 15px 0;
-  white-space: nowrap;
-  cursor: pointer;
+.nav-content a{
+  color:white;
+  text-decoration:none;
+  padding:16px 0;
+  white-space:nowrap;
+  cursor:pointer;
 }
-.nav-content a:hover { color: var(--gold); }
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 25px 5%;
+.nav-content a:hover{color:var(--gold)}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:25px 5%;
 }
-.banner {
-  min-height: 180px;
-  border-radius: 12px;
-  padding: 35px;
-  margin-bottom: 30px;
-  color: white;
-  background: linear-gradient(120deg, #101d35, #28466d);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+
+/* BANNER FOTO */
+.banner{
+  min-height:290px;
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:35px;
+  padding:35px;
+  display:flex;
+  align-items:center;
+  color:white;
+  background:
+    linear-gradient(90deg,rgba(8,17,35,.92),rgba(8,17,35,.25)),
+    url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1600&q=85")
+    center/cover no-repeat;
 }
-.banner h1 { margin: 0 0 12px; color: var(--gold); }
-.banner p { margin: 0; line-height: 1.6; }
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 3px solid var(--gold);
-  margin-bottom: 20px;
+.banner h1{
+  color:var(--gold);
+  font-size:38px;
+  margin:0 0 12px;
 }
-.section-heading h2 { color: var(--navy); }
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+.banner p{
+  max-width:600px;
+  line-height:1.7;
+  font-size:16px;
 }
-.news-card {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 3px 12px #00000010;
-  cursor: pointer;
-  transition: .2s;
+.banner-content{max-width:650px}
+
+.section-heading{
+  border-bottom:3px solid var(--gold);
+  margin-bottom:22px;
 }
-.news-card:hover { transform: translateY(-4px); }
-.news-card img {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-  background: #dce2ea;
+.section-heading h2{color:var(--navy)}
+
+.news-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
 }
-.news-card-content { padding: 17px; }
-.news-category {
-  color: #a57916;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
+.news-card{
+  background:white;
+  border-radius:11px;
+  overflow:hidden;
+  box-shadow:0 4px 14px #00000012;
+  cursor:pointer;
+  transition:.2s;
 }
-.news-card h3 { line-height: 1.4; margin: 10px 0; }
-.news-card p { color: var(--muted); line-height: 1.5; }
-.news-date { font-size: 12px; color: var(--muted); }
-.empty-message {
-  grid-column: 1/-1;
-  text-align: center;
-  padding: 35px;
-  background: white;
-  border-radius: 10px;
+.news-card:hover{transform:translateY(-5px)}
+.news-card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  background:#dce2ea;
 }
-.footer {
-  background: var(--navy);
-  color: white;
-  text-align: center;
-  padding: 25px;
-  margin-top: 45px;
+.news-card-content{padding:17px}
+.news-category{
+  color:#a57916;
+  font-size:12px;
+  font-weight:bold;
+  text-transform:uppercase;
 }
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #000b;
-  padding: 18px;
-  overflow-y: auto;
-  align-items: center;
-  justify-content: center;
+.news-card h3{
+  line-height:1.4;
+  margin:10px 0;
 }
-.modal.show { display: flex; }
-.modal-content {
-  width: 100%;
-  max-width: 650px;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
+.news-card p{
+  color:var(--muted);
+  line-height:1.6;
 }
-.modal-content h2 { color: var(--navy); }
-.close-button {
-  float: right;
-  border: 0;
-  background: #eee;
-  border-radius: 5px;
-  padding: 7px 12px;
-  cursor: pointer;
+.news-date{
+  color:var(--muted);
+  font-size:12px;
 }
-.form-group { margin: 15px 0; }
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 7px;
+.empty-message{
+  grid-column:1/-1;
+  text-align:center;
+  background:white;
+  padding:35px;
+  border-radius:10px;
 }
-.form-group input, .form-group textarea, .form-group select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccd3df;
-  border-radius: 6px;
+
+.footer{
+  background:var(--navy);
+  color:white;
+  text-align:center;
+  padding:30px;
+  margin-top:45px;
 }
-.form-group textarea { min-height: 130px; }
-.primary-button {
-  background: var(--navy);
-  color: white;
-  border: 0;
-  padding: 12px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.75);
+  padding:18px;
+  overflow-y:auto;
+  align-items:center;
+  justify-content:center;
 }
-.secondary-button {
-  background: #e8edf4;
-  color: var(--navy);
-  border: 0;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
+.modal.show{display:flex}
+.modal-content{
+  width:100%;
+  max-width:650px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:white;
+  padding:25px;
+  border-radius:12px;
 }
-.form-message { margin-top: 12px; font-size: 14px; }
-.admin-panel { display: none; }
-.admin-panel.active { display: block; }
-.admin-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+.modal-content h2{color:var(--navy)}
+.close-button{
+  float:right;
+  border:0;
+  background:#eee;
+  padding:9px 13px;
+  border-radius:6px;
 }
-.article-item {
-  border: 1px solid #ddd;
-  border-radius: 7px;
-  padding: 12px;
-  margin: 10px 0;
+.form-group{margin:16px 0}
+.form-group label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:7px;
 }
-.article-item button { margin: 5px 5px 0 0; }
-.detail-content img {
-  width: 100%;
-  max-height: 350px;
-  object-fit: cover;
-  border-radius: 8px;
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccd3df;
+  border-radius:6px;
 }
-.detail-content p { line-height: 1.8; white-space: pre-wrap; }
-@media(max-width:800px) {
-  .news-grid { grid-template-columns: repeat(2,1fr); }
+.form-group textarea{min-height:140px}
+.primary-button{
+  background:var(--navy);
+  color:white;
+  border:0;
+  padding:12px 18px;
+  border-radius:6px;
 }
-@media(max-width:550px) {
-  .news-grid { grid-template-columns: 1fr; }
-  .header-content { flex-wrap: wrap; }
-  .banner { padding: 25px; }
+.secondary-button{
+  background:#e8edf4;
+  color:var(--navy);
+  border:0;
+  padding:11px 15px;
+  border-radius:6px;
 }
+.form-message{margin-top:12px;font-size:14px}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+.admin-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+.article-item{
+  border:1px solid #ddd;
+  padding:13px;
+  border-radius:7px;
+  margin:10px 0;
+}
+.article-item button{margin:5px}
+.detail-content img{
+  width:100%;
+  max-height:350px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.detail-content p{
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+@media(max-width:800px){
+  .news-grid{grid-template-columns:repeat(2,1fr)}
+  .banner h1{font-size:30px}
+}
+@media(max-width:550px){
+  .news-grid{grid-template-columns:1fr}
+  .banner{min-height:230px;padding:23px}
+  .banner h1{font-size:27px}
+  .logo{font-size:23px}
+}
+
 </style>
 </head>
 
 <body>
+
 <header class="header">
   <div class="header-content">
     <div class="logo">BOLA<span>TERKINI</span></div>
-    <button type="button" class="admin-button" id="adminButton">⚙ Admin</button>
+    <button type="button" class="admin-button" id="adminButton">
+      ⚙ Admin
+    </button>
   </div>
 </header>
 
@@ -253,19 +289,28 @@ button, input, textarea, select { font: inherit; }
 </nav>
 
 <main class="container">
+
   <section class="banner">
-    <h1>Berita Sepak Bola Terkini</h1>
-    <p>Informasi terbaru, hasil pertandingan, kabar transfer, dan berita sepak bola Indonesia maupun dunia.</p>
+    <div class="banner-content">
+      <h1>Berita Sepak Bola Terkini</h1>
+      <p>
+        Dapatkan informasi terbaru, hasil pertandingan,
+        kabar transfer, dan berita sepak bola Indonesia
+        maupun dunia hanya di BolaTerkini.
+      </p>
+    </div>
   </section>
 
-  <section class="news-section">
+  <section>
     <div class="section-heading">
       <h2 id="sectionTitle">Berita Terbaru</h2>
     </div>
+
     <div class="news-grid" id="newsGrid">
       <div class="empty-message">Memuat berita...</div>
     </div>
   </section>
+
 </main>
 
 <footer class="footer">
@@ -277,33 +322,49 @@ button, input, textarea, select { font: inherit; }
 <!-- MODAL ADMIN -->
 <div class="modal" id="adminModal">
   <div class="modal-content">
-    <button type="button" class="close-button" id="closeAdmin">Tutup ✕</button>
-    <h2>Panel Admin BolaTerkini</h2>
+
+    <button type="button" class="close-button" id="closeAdmin">
+      Tutup ✕
+    </button>
+
+    <h2>Admin BolaTerkini</h2>
 
     <div id="loginPanel">
-      <p>Silakan login untuk mengelola berita.</p>
+      <p>Login untuk mengelola berita.</p>
+
       <form id="loginForm">
         <div class="form-group">
           <label>Email Admin</label>
           <input type="email" id="adminEmail" required>
         </div>
+
         <div class="form-group">
           <label>Password</label>
           <input type="password" id="adminPassword" required>
         </div>
-        <button class="primary-button" type="submit">Login</button>
+
+        <button type="submit" class="primary-button">Login</button>
       </form>
-      <div class="form-message" id="loginMessage"></div>
+
+      <div id="loginMessage" class="form-message"></div>
     </div>
 
     <div class="admin-panel" id="adminPanel">
+
       <div class="admin-actions">
-        <button type="button" class="primary-button" id="newArticleButton">+ Tambah Berita</button>
-        <button type="button" class="secondary-button" id="logoutButton">Logout</button>
+        <button type="button" class="primary-button" id="newArticleButton">
+          + Tambah Berita
+        </button>
+
+        <button type="button" class="secondary-button" id="logoutButton">
+          Logout
+        </button>
       </div>
 
       <form id="articleForm" style="display:none">
+
         <h3 id="formTitle">Tambah Berita</h3>
+
         <input type="hidden" id="articleId">
 
         <div class="form-group">
@@ -313,13 +374,13 @@ button, input, textarea, select { font: inherit; }
 
         <div class="form-group">
           <label>Kategori</label>
-          <select id="articleCategory" required>
-            <option value="Liga Indonesia">Liga Indonesia</option>
-            <option value="Liga Inggris">Liga Inggris</option>
-            <option value="Liga Spanyol">Liga Spanyol</option>
-            <option value="Liga Italia">Liga Italia</option>
-            <option value="Champions League">Champions League</option>
-            <option value="Berita Dunia">Berita Dunia</option>
+          <select id="articleCategory">
+            <option>Liga Indonesia</option>
+            <option>Liga Inggris</option>
+            <option>Liga Spanyol</option>
+            <option>Liga Italia</option>
+            <option>Champions League</option>
+            <option>Berita Dunia</option>
           </select>
         </div>
 
@@ -329,43 +390,49 @@ button, input, textarea, select { font: inherit; }
         </div>
 
         <div class="form-group">
-          <label>URL Gambar (opsional)</label>
+          <label>URL Gambar</label>
           <input type="url" id="articleImage" placeholder="https://...">
         </div>
 
         <div class="form-group">
-          <label>Atau Upload Gambar</label>
+          <label>Upload Gambar</label>
           <input type="file" id="articleImageFile" accept="image/*">
         </div>
 
         <div class="form-group">
-          <label><input type="checkbox" id="articlePublished" checked style="width:auto"> Terbitkan berita</label>
+          <label>
+            <input type="checkbox" id="articlePublished" checked style="width:auto">
+            Terbitkan berita
+          </label>
         </div>
 
         <button type="submit" class="primary-button">Simpan Berita</button>
         <button type="button" class="secondary-button" id="cancelArticle">Batal</button>
-        <div class="form-message" id="articleMessage"></div>
+
+        <div id="articleMessage" class="form-message"></div>
       </form>
 
       <h3>Daftar Berita</h3>
       <div id="adminArticleList">Memuat...</div>
+
     </div>
   </div>
 </div>
 
-<!-- MODAL DETAIL BERITA -->
+<!-- MODAL DETAIL -->
 <div class="modal" id="detailModal">
   <div class="modal-content detail-content">
-    <button type="button" class="close-button" id="closeDetail">Tutup ✕</button>
+    <button type="button" class="close-button" id="closeDetail">
+      Tutup ✕
+    </button>
     <div id="detailBody"></div>
   </div>
 </div>
 
-<!-- LANJUTKAN DENGAN BAGIAN 2 DI SINI -->
-</body>
-      </html>
-      
+<!-- BAGIAN 2 DITEMPEL DI BAWAH INI -->
+  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 const SUPABASE_URL = "https://hbpwpesycrpfiqsdaqbn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
@@ -380,20 +447,6 @@ let selectedCategory = "Semua";
 
 const $ = id => document.getElementById(id);
 
-function showMessage(id, message, isError = false) {
-  const element = $(id);
-  element.textContent = message;
-  element.style.color = isError ? "#c0392b" : "#168044";
-}
-
-function openModal(id) {
-  $(id).classList.add("show");
-}
-
-function closeModal(id) {
-  $(id).classList.remove("show");
-}
-
 function escapeHTML(value = "") {
   return String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;",
@@ -404,6 +457,19 @@ function escapeHTML(value = "") {
   })[char]);
 }
 
+function showMessage(id, message, error = false) {
+  $(id).textContent = message;
+  $(id).style.color = error ? "#c0392b" : "#168044";
+}
+
+function openModal(id) {
+  $(id).classList.add("show");
+}
+
+function closeModal(id) {
+  $(id).classList.remove("show");
+}
+
 function formatDate(date) {
   return new Date(date).toLocaleDateString("id-ID", {
     day: "numeric",
@@ -412,19 +478,14 @@ function formatDate(date) {
   });
 }
 
-// TOMBOL ADMIN
+// ADMIN DAN MODAL
 $("adminButton").addEventListener("click", async () => {
   openModal("adminModal");
   await checkLogin();
 });
 
-$("closeAdmin").addEventListener("click", () => {
-  closeModal("adminModal");
-});
-
-$("closeDetail").addEventListener("click", () => {
-  closeModal("detailModal");
-});
+$("closeAdmin").addEventListener("click", () => closeModal("adminModal"));
+$("closeDetail").addEventListener("click", () => closeModal("detailModal"));
 
 $("adminModal").addEventListener("click", event => {
   if (event.target === $("adminModal")) closeModal("adminModal");
@@ -437,14 +498,12 @@ $("detailModal").addEventListener("click", event => {
 // LOGIN
 $("loginForm").addEventListener("submit", async event => {
   event.preventDefault();
+
   showMessage("loginMessage", "Sedang login...");
 
-  const email = $("adminEmail").value.trim();
-  const password = $("adminPassword").value;
-
   const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
+    email: $("adminEmail").value.trim(),
+    password: $("adminPassword").value
   });
 
   if (error) {
@@ -456,7 +515,7 @@ $("loginForm").addEventListener("submit", async event => {
   await checkLogin();
 });
 
-// CEK STATUS LOGIN
+// STATUS LOGIN
 async function checkLogin() {
   const { data, error } = await supabaseClient.auth.getSession();
 
@@ -470,9 +529,7 @@ async function checkLogin() {
   $("loginPanel").style.display = currentUser ? "none" : "block";
   $("adminPanel").classList.toggle("active", !!currentUser);
 
-  if (currentUser) {
-    await loadAdminArticles();
-  }
+  if (currentUser) await loadAdminArticles();
 }
 
 supabaseClient.auth.onAuthStateChange((_event, session) => {
@@ -495,7 +552,7 @@ $("logoutButton").addEventListener("click", async () => {
   showMessage("loginMessage", "Berhasil logout.");
 });
 
-// TAMPILKAN FORM BERITA
+// FORM BERITA
 $("newArticleButton").addEventListener("click", () => {
   resetArticleForm();
   $("articleForm").style.display = "block";
@@ -514,7 +571,7 @@ function resetArticleForm() {
   $("articleMessage").textContent = "";
 }
 
-// SIMPAN / EDIT BERITA
+// SIMPAN BERITA
 $("articleForm").addEventListener("submit", async event => {
   event.preventDefault();
 
@@ -532,7 +589,7 @@ $("articleForm").addEventListener("submit", async event => {
   try {
     if (file) {
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const filePath = `${Date.now()}-${safeName}`;
+      const filePath = Date.now() + "-" + safeName;
 
       const { error: uploadError } = await supabaseClient.storage
         .from("article-images")
@@ -570,20 +627,20 @@ $("articleForm").addEventListener("submit", async event => {
 
     if (result.error) throw result.error;
 
-    showMessage("articleMessage", "Berita berhasil disimpan!");
-
     resetArticleForm();
     $("articleForm").style.display = "none";
 
     await loadAdminArticles();
     await loadNews();
 
+    showMessage("articleMessage", "Berita berhasil disimpan!");
+
   } catch (error) {
     showMessage("articleMessage", error.message, true);
   }
 });
 
-// AMBIL BERITA UNTUK ADMIN
+// DAFTAR BERITA ADMIN
 async function loadAdminArticles() {
   $("adminArticleList").textContent = "Memuat berita...";
 
@@ -620,13 +677,11 @@ async function loadAdminArticles() {
   });
 
   $("adminArticleList").querySelectorAll("[data-delete]").forEach(button => {
-    button.addEventListener("click", () => {
-      deleteArticle(button.dataset.delete);
-    });
+    button.addEventListener("click", () => deleteArticle(button.dataset.delete));
   });
 }
 
-// EDIT BERITA
+// EDIT
 function editArticle(article) {
   $("articleId").value = article.id;
   $("articleTitle").value = article.title || "";
@@ -640,7 +695,7 @@ function editArticle(article) {
   $("articleForm").scrollIntoView({ behavior: "smooth" });
 }
 
-// HAPUS BERITA
+// HAPUS
 async function deleteArticle(id) {
   if (!confirm("Yakin ingin menghapus berita ini?")) return;
 
@@ -650,7 +705,7 @@ async function deleteArticle(id) {
     .eq("id", id);
 
   if (error) {
-    alert("Gagal menghapus: " + error.message);
+    alert(error.message);
     return;
   }
 
@@ -658,7 +713,7 @@ async function deleteArticle(id) {
   await loadNews();
 }
 
-// TAMPILKAN BERITA PUBLIK
+// BERITA PUBLIK
 async function loadNews() {
   $("newsGrid").innerHTML =
     '<div class="empty-message">Memuat berita...</div>';
@@ -693,10 +748,11 @@ async function loadNews() {
         src="${escapeHTML(article.image_url || "https://placehold.co/600x350/192b49/e7b84b?text=BolaTerkini")}"
         alt="${escapeHTML(article.title)}"
         onerror="this.src='https://placehold.co/600x350/192b49/e7b84b?text=BolaTerkini'">
+
       <div class="news-card-content">
         <span class="news-category">${escapeHTML(article.category)}</span>
         <h3>${escapeHTML(article.title)}</h3>
-        <p>${escapeHTML((article.content || "").slice(0, 120))}...</p>
+        <p>${escapeHTML((article.content || "").slice(0,120))}...</p>
         <span class="news-date">${formatDate(article.created_at)}</span>
       </div>
     </article>
@@ -727,14 +783,17 @@ function showDetail(article) {
 document.querySelectorAll(".nav-content a").forEach(link => {
   link.addEventListener("click", event => {
     event.preventDefault();
+
     selectedCategory = link.dataset.category;
+
     $("sectionTitle").textContent =
       selectedCategory === "Semua" ? "Berita Terbaru" : selectedCategory;
+
     loadNews();
   });
 });
 
-// JALANKAN WEBSITE
+// MULAI WEBSITE
 async function initializeWebsite() {
   await loadNews();
   await checkLogin();
@@ -746,5 +805,6 @@ initializeWebsite().catch(error => {
     `<div class="empty-message">Terjadi kesalahan: ${escapeHTML(error.message)}</div>`;
 });
 </script>
+
 </body>
 </html>
