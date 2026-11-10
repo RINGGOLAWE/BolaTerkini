@@ -1,0 +1,304 @@
+
+:root {
+  --green: #087c45;
+  --dark: #101b16;
+  --bg: #f3f6f4;
+  --white: #fff;
+  --muted: #718078;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: #17251d;
+}
+
+header {
+  background: var(--dark);
+  color: white;
+}
+
+.top {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.logo span {
+  color: #39d98a;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-weight: bold;
+}
+
+.admin {
+  background: var(--green);
+  color: white;
+}
+
+nav {
+  background: #17251d;
+  padding: 12px 20px;
+  display: flex;
+  gap: 10px;
+  overflow: auto;
+}
+
+nav button {
+  background: transparent;
+  color: white;
+  white-space: nowrap;
+}
+
+nav button.active,
+nav button:hover {
+  background: var(--green);
+}
+
+.announcement-banner {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 18px;
+}
+
+.announcement-banner img {
+  width: 100%;
+  display: block;
+  height: auto;
+  border-radius: 14px;
+}
+
+.hero {
+  background: linear-gradient(120deg, #064c30, #101b16);
+  color: white;
+  padding: 45px 20px;
+}
+
+.hero-inner {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin: 0 0 12px;
+}
+
+.hero p {
+  color: #d4e7dc;
+}
+
+main {
+  max-width: 1100px;
+  margin: 28px auto;
+  padding: 0 18px;
+}
+
+.tools {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d4ddd7;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.search {
+  max-width: 450px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 15px #10251a0d;
+}
+
+.card img {
+  width: 100%;
+  height: 185px;
+  object-fit: cover;
+  background: #dce8df;
+}
+
+.card-body {
+  padding: 16px;
+}
+
+.tag {
+  font-size: 12px;
+  color: var(--green);
+  font-weight: bold;
+}
+
+.card h3 {
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+.meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.read {
+  background: var(--green);
+  color: white;
+  margin-top: 12px;
+}
+
+.empty {
+  text-align: center;
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  color: var(--muted);
+}
+
+footer {
+  background: var(--dark);
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: 50px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  z-index: 5;
+  overflow: auto;
+  padding: 20px;
+}
+
+.panel {
+  background: white;
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 22px;
+  border-radius: 14px;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.field {
+  margin: 14px 0;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.primary {
+  background: var(--green);
+  color: white;
+}
+
+.secondary {
+  background: #e8eee9;
+  color: #17251d;
+}
+
+.danger {
+  background: #b42318;
+  color: white;
+}
+
+.article-image {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.article-content {
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.admin-list {
+  border-top: 1px solid #ddd;
+  padding: 12px 0;
+}
+
+.status {
+  color: var(--green);
+  font-size: 13px;
+}
+
+@media (max-width: 750px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top {
+    padding: 15px;
+  }
+
+  .card img {
+    height: 210px;
+  }
+}
