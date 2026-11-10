@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -22,6 +23,17 @@ button{cursor:pointer;border:0;border-radius:8px;padding:11px 16px;font-weight:b
 nav{background:#17251d;padding:12px 20px;display:flex;gap:10px;overflow:auto}
 nav button{background:transparent;color:white;white-space:nowrap}
 nav button.active,nav button:hover{background:var(--green)}
+.announcement-banner{
+  max-width:1100px;
+  margin:20px auto;
+  padding:0 18px;
+}
+.announcement-banner img{
+  width:100%;
+  display:block;
+  height:auto;
+  border-radius:14px;
+}
 .hero{background:linear-gradient(120deg,#064c30,#101b16);color:white;padding:45px 20px}
 .hero-inner{max-width:1100px;margin:auto}
 .hero h1{font-size:36px;margin:0 0 12px}
@@ -81,6 +93,11 @@ footer{background:var(--dark);color:white;text-align:center;padding:25px;margin-
   <button onclick="chooseCategory('Liga Champions',this)">Champions</button>
  </nav>
 </header>
+
+<!-- BANNER RESMI BOLATERKINI -->
+<section class="announcement-banner">
+ <img src="banner-bolaterkini.png" alt="BolaTerkini Resmi Hadir">
+</section>
 
 <section class="hero">
  <div class="hero-inner">
@@ -171,7 +188,7 @@ footer{background:var(--dark);color:white;text-align:center;padding:25px;margin-
 </div>
 
 <script>
-// ISI DUA BAGIAN INI DENGAN DATA PROJECT SUPABASE KAMU
+// PENGATURAN SUPABASE
 const SUPABASE_URL = "https://hbpwpesycrpfiqsdaqbn.supabase.co";
 const SUPABASE_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
 
