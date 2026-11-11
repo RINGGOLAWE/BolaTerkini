@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="BolaTerkini menyajikan berita sepak bola terbaru.">
+<title>BolaTerkini | Berita Sepak Bola</title>
+<style>
+:root{--navy:#08182c;--navy2:#102943;--gold:#f2bd45;--bg:#f3f5f8;--ink:#172438;--muted:#68778b;--line:#e0e6ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.top{background:#04101f;color:#c9d3df;padding:9px max(18px,calc((100% - 1160px)/2));font-size:12px}
+header{background:var(--navy);color:white;border-bottom:4px solid var(--gold)}.head{max-width:1160px;margin:auto;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{display:flex;align-items:center;gap:12px;color:white;text-decoration:none}.ball{width:44px;height:44px;border-radius:12px;background:var(--gold);display:grid;place-items:center;color:var(--navy);font-size:25px}.brand b{font-size:26px;letter-spacing:.5px}.brand b span{color:var(--gold)}.brand small{display:block;color:#b9c6d5;margin-top:4px}
+.gold{background:var(--gold);color:#152238;border:0;border-radius:8px;padding:11px 16px;font-weight:bold}.secondary{background:white;border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-weight:bold}.danger{background:#fff0f0;color:#a52b31;border:1px solid #efc4c7;border-radius:7px;padding:8px 10px}
+nav{background:var(--navy2);overflow:auto}.nav{max-width:1160px;margin:auto;padding:0 16px;display:flex;gap:4px}.nav a{white-space:nowrap;color:#e6edf5;text-decoration:none;padding:14px 11px;font-size:13px;font-weight:bold}.nav a:hover{color:var(--gold)}
+main{max-width:1160px;margin:26px auto;padding:0 18px}.hero{min-height:285px;border-radius:15px;display:flex;align-items:end;padding:30px;color:white;background:linear-gradient(90deg,rgba(3,13,26,.93),rgba(3,13,26,.35)),url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1600&q=85") center/cover}.hero small{color:var(--gold);font-weight:bold;letter-spacing:1px}.hero h1{font-size:clamp(30px,5vw,46px);max-width:650px;line-height:1.1;margin:10px 0}.hero p{max-width:600px;color:#e0e7ef;line-height:1.6}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:28px 0 16px}.toolbar h2{font-size:24px;margin:0;color:var(--navy)}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters input,.filters select{border:1px solid var(--line);border-radius:8px;padding:10px;background:white;min-width:180px}
+.columns{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:20px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-content:start}.card,.side{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden}.card img{width:100%;height:180px;object-fit:cover;background:#dce3eb}.card-body{padding:15px;display:flex;flex-direction:column;gap:9px}.cat{font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:.8px;color:#9a690d}.card h3{font-size:20px;line-height:1.25;margin:0;color:var(--navy)}.card p,.side p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}.meta{font-size:11px;color:#8a97a7;margin-top:auto}.read{border:0;background:none;color:#96650a;font-weight:bold;text-align:left;padding:5px 0 0}.empty{grid-column:1/-1;background:white;border:1px dashed #cbd4df;border-radius:10px;padding:30px;text-align:center;color:var(--muted)}
+.side{padding:17px;margin-bottom:14px}.side h3{margin:0 0 12px;color:var(--navy);font-size:19px}.popular{padding:10px 0;border-top:1px solid var(--line);font-size:13px;font-weight:bold;cursor:pointer}.popular small{display:block;color:#9a690d;font-size:10px;margin-bottom:4px}
+footer{margin-top:42px;background:#04101f;color:#b9c6d5;padding:28px 18px}.foot{max-width:1160px;margin:auto;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.foot strong{color:white}.foot p{font-size:12px;line-height:1.6;max-width:550px}
+.notice{display:none;padding:11px 13px;border-radius:8px;margin:12px 0;font-size:13px}.notice.show{display:block}.notice.error{background:#fff0f0;color:#9c282e}.notice.ok{background:#eaf7ef;color:#17663e}
+.modal{display:none;position:fixed;inset:0;background:#020a14bb;z-index:10;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.box{width:min(700px,100%);max-height:92vh;overflow:auto;background:white;border-radius:14px;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.modalhead h2{margin:0;color:var(--navy)}.close{border:0;background:#edf1f5;border-radius:7px;padding:8px 12px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:bold}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #d6dee8;border-radius:7px}.field textarea{min-height:140px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.adminrow{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding:10px 0;font-size:13px}.adminrow small{display:block;color:var(--muted);margin-top:4px}.detailimg{width:100%;max-height:350px;object-fit:cover;border-radius:9px;margin:12px 0}.articletext{white-space:pre-wrap;line-height:1.8;color:#35445a}
+@media(max-width:780px){.columns{grid-template-columns:1fr}.asidegrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.side{margin:0}}@media(max-width:560px){.head{padding:15px}.brand b{font-size:22px}.hero{padding:20px;min-height:250px}.grid{grid-template-columns:1fr}.card img{height:205px}.asidegrid{grid-template-columns:1fr}.filters{width:100%}.filters input,.filters select{flex:1;min-width:0}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="top">INFORMASI SEPAK BOLA TERKINI <span style="float:right">BolaTerkini</span></div>
+<header><div class="head"><a class="brand" href="#"><div class="ball">⚽</div><div><b>BOLA<span>TERKINI</span></b><small>Cepat, aktual, terpercaya</small></div></a><button class="gold" id="adminOpen">Admin</button></div></header>
+<nav><div class="nav">
+<a href="#">Beranda</a><a href="#berita">Berita Terbaru</a>
+<a href="#berita" data-cat="Liga Indonesia">Liga Indonesia</a><a href="#berita" data-cat="Liga Inggris">Liga Inggris</a><a href="#berita" data-cat="Liga Spanyol">Liga Spanyol</a><a href="#berita" data-cat="Liga Italia">Liga Italia</a><a href="#berita" data-cat="Champions League">Champions League</a><a href="#tentang">Tentang Kami</a>
+</div></nav>
+<main>
+<section class="hero"><div><small>PORTAL BERITA SEPAK BOLA</small><h1>Semua kabar lapangan hijau, dalam satu tempat.</h1><p>Ikuti berita, cerita pertandingan, dan perkembangan sepak bola dari dalam maupun luar negeri bersama BolaTerkini.</p></div></section>
+<div class="toolbar" id="berita"><h2>BERITA TERBARU</h2><div class="filters"><input id="search" type="search" placeholder="Cari berita..."><select id="filter"><option value="">Semua kategori</option><option>Liga Indonesia</option><option>Liga Inggris</option><option>Liga Spanyol</option><option>Liga Italia</option><option>Champions League</option><option>Berita Dunia</option></select></div></div>
+<div id="pageNotice" class="notice"></div>
+<div class="columns"><section class="grid" id="news"><div class="empty">Memuat berita...</div></section><aside class="asidegrid">
+<div class="side"><h3>TENTANG BOLATERKINI</h3><p>BolaTerkini menyajikan informasi sepak bola dengan fokus pada berita yang jelas, ringkas, dan mudah dibaca. Cantumkan sumber dan tanggal setiap berita.</p></div>
+<div class="side"><h3>BERITA POPULER</h3><div id="popular"><div class="popular">Berita akan muncul setelah artikel tersedia.</div></div></div>
+</aside></div>
+<section class="side" id="tentang" style="margin-top:20px"><h3>TENTANG KAMI</h3><p>BolaTerkini adalah portal informasi sepak bola. Untuk pertanyaan, koreksi, atau kerja sama redaksi, hubungi pengelola melalui kontak resmi yang akan ditambahkan.</p></section>
+</main>
+<footer><div class="foot"><div><strong>BOLATERKINI</strong><p>Portal informasi sepak bola. Sajikan berita secara bertanggung jawab, cantumkan sumber, dan hormati hak cipta tulisan maupun foto.</p></div><div><strong>Menu</strong><p><a href="#" style="color:inherit">Beranda</a> · <a href="#berita" style="color:inherit">Berita</a> · <a href="#tentang" style="color:inherit">Tentang Kami</a></p></div></div></footer>
+
+<div class="modal" id="adminModal" role="dialog" aria-modal="true"><div class="box">
+<div class="modalhead"><h2>PANEL ADMIN</h2><button class="close" data-close="adminModal">Tutup</button></div><div id="adminNotice" class="notice"></div>
+<section id="loginPanel"><p style="font-size:13px;color:#68778b">Login dengan akun admin yang dibuat melalui Supabase Authentication.</p><div class="fields"><div class="field full"><label>Email admin</label><input id="email" type="email" autocomplete="username"></div><div class="field full"><label>Password</label><input id="password" type="password" autocomplete="current-password"></div></div><div class="actions"><button class="gold" id="login">Masuk</button></div></section>
+<section id="managePanel" hidden><p id="who" style="font-size:12px;color:#68778b"></p>
+<form id="articleForm"><input id="articleId" type="hidden"><div class="fields">
+<div class="field full"><label>Judul berita</label><input id="title" maxlength="180" required></div>
+<div class="field"><label>Kategori</label><select id="category"><option>Liga Indonesia</option><option>Liga Inggris</option><option>Liga Spanyol</option><option>Liga Italia</option><option>Champions League</option><option>Berita Dunia</option></select></div>
+<div class="field"><label>Foto (JPG/PNG/WebP, maks. 5 MB)</label><input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp"></div>
+<div class="field full"><label>Isi berita</label><textarea id="content" required></textarea></div>
+<div class="field full"><label style="display:flex;align-items:center;gap:8px"><input id="published" type="checkbox" checked style="width:auto"> Terbitkan berita</label></div>
+</div><div class="actions"><button class="gold" id="save" type="submit">Simpan berita</button><button class="secondary" type="button" id="reset">Kosongkan form</button><button class="secondary" type="button" id="logout">Keluar</button></div></form>
+<div style="margin-top:18px"><b>Kelola berita</b><div id="adminList"></div></div>
+</section></div></div>
+<div class="modal" id="detailModal" role="dialog" aria-modal="true"><div class="box"><div class="modalhead"><b>ARTIKEL BOLATERKINI</b><button class="close" data-close="detailModal">Tutup</button></div><div id="detail"></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Konfigurasi project Supabase. Publishable key aman digunakan di frontend
+   hanya jika Row Level Security (RLS) dan policy database disetel dengan benar. */
+const SUPABASE_URL = "https://hbpwpesycrpfiqsdaqbn.supabase.co";
+const SUPABASE_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
+const TABLE = "articles";
+const BUCKET = "article-images";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+let articles = [], sessionUser = null;
+
+function notice(id,msg,type="ok"){const el=$(id);el.textContent=msg;el.className="notice show "+type;}
+function clearNotice(id){const el=$(id);el.textContent="";el.className="notice";}
+function dateText(v){if(!v)return "Tanggal tidak tersedia";const d=new Date(v);return isNaN(d)?"Tanggal tidak tersedia":d.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});}
+function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function fallbackImage(){return "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1000&q=80";}
+
+async function loadPublicArticles(){
+ const {data,error}=await supabaseClient.from(TABLE).select("id,title,category,content,image_url,is_published,created_at").eq("is_published",true).order("created_at",{ascending:false});
+ if(error){$("news").replaceChildren(node("div","empty","Berita belum dapat dimuat. Periksa tabel articles, kolom is_published, dan kebijakan akses Supabase."));notice("pageNotice","Supabase: "+error.message,"error");return;}
+ clearNotice("pageNotice");articles=data||[];applyFilters();
+}
+function applyFilters(){
+ const q=$("search").value.trim().toLowerCase(),cat=$("filter").value;
+ const found=articles.filter(a=>(!cat||a.category===cat)&&(!q||((a.title||"")+" "+(a.content||"")).toLowerCase().includes(q)));
+ renderNews(found);
+}
+function renderNews(items){
+ const root=$("news");root.replaceChildren();
+ if(!items.length)root.append(node("div","empty","Belum ada berita yang cocok. Coba kata kunci atau kategori lain."));
+ items.forEach(a=>{
+  const card=node("article","card"),img=node("img");img.src=a.image_url||fallbackImage();img.alt=a.title||"Foto sepak bola";img.loading="lazy";img.onerror=()=>{img.src=fallbackImage();};
+  const body=node("div","card-body");body.append(node("div","cat",a.category||"Berita sepak bola"),node("h3","",a.title||"Tanpa judul"),node("p","",(a.content||"").replace(/\s+/g," ").slice(0,145)+(a.content&&a.content.length>145?"…":"")),node("div","meta",dateText(a.created_at)));
+  const read=node("button","read","Baca selengkapnya →");read.type="button";read.addEventListener("click",()=>showArticle(a));body.append(read);card.append(img,body);root.append(card);
+ });
+ renderPopular(items);
+}
+function renderPopular(items){
+ const root=$("popular");root.replaceChildren();const top=items.slice(0,5);
+ if(!top.length){root.append(node("div","popular","Belum ada berita populer."));return;}
+ top.forEach(a=>{const el=node("div","popular");el.append(node("small","",a.category||"Berita"),document.createTextNode(a.title||"Tanpa judul"));el.addEventListener("click",()=>showArticle(a));root.append(el);});
+}
+function showArticle(a){
+ const root=$("detail");root.replaceChildren();root.append(node("div","cat",a.category||"Berita sepak bola"),node("h2","",a.title||"Tanpa judul"),node("div","meta",dateText(a.created_at)));
+ const img=node("img","detailimg");img.src=a.image_url||fallbackImage();img.alt=a.title||"Foto sepak bola";root.append(img,node("div","articletext",a.content||"Isi berita belum tersedia."));$("detailModal").classList.add("open");
+}
+function resetForm(){$("articleForm").reset();$("articleId").value="";$("published").checked=true;$("save").textContent="Simpan berita";}
+function openAdmin(){$("adminModal").classList.add("open");clearNotice("adminNotice");refreshSession();}
+async function refreshSession(){const {data,error}=await supabaseClient.auth.getSession();if(error){notice("adminNotice",error.message,"error");return;}sessionUser=data.session?.user||null;setAdminView();}
+function setAdminView(){
+ $("loginPanel").hidden=!!sessionUser;$("managePanel").hidden=!sessionUser;
+ if(sessionUser){$("who").textContent="Login sebagai: "+sessionUser.email;loadAdminArticles();}
+}
+async function doLogin(){
+ clearNotice("adminNotice");const email=$("email").value.trim(),password=$("password").value;
+ if(!email||!password){notice("adminNotice","Isi email dan password terlebih dahulu.","error");return;}
+ const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+ if(error){notice("adminNotice","Login gagal: "+error.message,"error");return;}
+ sessionUser=data.user;setAdminView();notice("adminNotice","Berhasil masuk.","ok");
+}
+async function doLogout(){
+ const {error}=await supabaseClient.auth.signOut();if(error){notice("adminNotice",error.message,"error");return;}
+ sessionUser=null;setAdminView();resetForm();notice("adminNotice","Anda sudah keluar.","ok");
+}
+async function loadAdminArticles(){
+ const {data,error}=await supabaseClient.from(TABLE).select("id,title,category,is_published,created_at").order("created_at",{ascending:false}).limit(50);
+ const root=$("adminList");root.replaceChildren();
+ if(error){root.append(node("p","", "Gagal mengambil daftar: "+error.message));return;}
+ if(!data?.length){root.append(node("p","","Belum ada artikel."));return;}
+ data.forEach(a=>{
+  const row=node("div","adminrow"),info=node("div","");info.append(node("span","",a.title||"Tanpa judul"),node("small","",(a.category||"")+(a.is_published?" • Terbit":" • Draft")));
+  const buttons=node("div","");const edit=node("button","secondary","Edit");edit.type="button";edit.addEventListener("click",()=>editArticle(a.id));
+  const del=node("button","danger","Hapus");del.type="button";del.addEventListener("click",()=>deleteArticle(a.id));
+  buttons.append(edit,del);row.append(info,buttons);root.append(row);
+ });
+}
+async function editArticle(id){
+ const {data,error}=await supabaseClient.from(TABLE).select("*").eq("id",id).single();
+ if(error){notice("adminNotice","Gagal membuka artikel: "+error.message,"error");return;}
+ $("articleId").value=data.id;$("title").value=data.title||"";$("category").value=data.category||"Liga Indonesia";$("content").value=data.content||"";$("published").checked=!!data.is_published;$("imageFile").value="";$("save").textContent="Perbarui berita";
+}
+async function deleteArticle(id){
+ if(!confirm("Yakin ingin menghapus berita ini?"))return;
+ const {error}=await supabaseClient.from(TABLE).delete().eq("id",id);
+ if(error){notice("adminNotice","Gagal menghapus: "+error.message,"error");return;}
+ notice("adminNotice","Berita berhasil dihapus.","ok");await loadAdminArticles();await loadPublicArticles();
+}
+async function uploadPhoto(file){
+ if(!file)return null;
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Format foto harus JPG, PNG, atau WebP.");
+ if(file.size>5*1024*1024)throw new Error("Ukuran foto maksimal 5 MB.");
+ const ext=file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+ const path=Date.now()+"-"+Math.random().toString(36).slice(2)+"."+ext;
+ const {error}=await supabaseClient.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type});
+ if(error)throw error;
+ const {data}=supabaseClient.storage.from(BUCKET).getPublicUrl(path);return data.publicUrl;
+}
+async function saveArticle(ev){
+ ev.preventDefault();if(!sessionUser){notice("adminNotice","Silakan login kembali.","error");return;}
+ const id=$("articleId").value,title=$("title").value.trim(),category=$("category").value,content=$("content").value.trim(),is_published=$("published").checked,file=$("imageFile").files[0];
+ if(!title||!content){notice("adminNotice","Judul dan isi berita wajib diisi.","error");return;}
+ $("save").disabled=true;$("save").textContent="Menyimpan...";
+ try{
+  let image_url=null;if(file)image_url=await uploadPhoto(file);
+  const payload={title,category,content,is_published};
+  if(image_url)payload.image_url=image_url;
+  let result;
+  if(id)result=await supabaseClient.from(TABLE).update(payload).eq("id",id);
+  else result=await supabaseClient.from(TABLE).insert(payload);
+  if(result.error)throw result.error;
+  resetForm();notice("adminNotice",id?"Berita berhasil diperbarui.":"Berita berhasil ditambahkan.","ok");
+  await loadAdminArticles();await loadPublicArticles();
+ }catch(err){notice("adminNotice","Gagal menyimpan: "+(err.message||"Periksa pengaturan Supabase."),"error");}
+ finally{$("save").disabled=false;$("save").textContent=$("articleId").value?"Perbarui berita":"Simpan berita";}
+}
+
+$("adminOpen").addEventListener("click",openAdmin);
+$("login").addEventListener("click",doLogin);$("logout").addEventListener("click",doLogout);
+$("articleForm").addEventListener("submit",saveArticle);$("reset").addEventListener("click",resetForm);
+$("search").addEventListener("input",applyFilters);$("filter").addEventListener("change",applyFilters);
+document.querySelectorAll("[data-cat]").forEach(link=>link.addEventListener("click",()=>{$("filter").value=link.dataset.cat;applyFilters();}));
+document.querySelectorAll("[data-close]").forEach(btn=>btn.addEventListener("click",()=>$(btn.dataset.close).classList.remove("open")));
+document.querySelectorAll(".modal").forEach(modal=>modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("open");}));
+supabaseClient.auth.onAuthStateChange((_event,session)=>{sessionUser=session?.user||null;setAdminView();});
+loadPublicArticles();
+</script>
+</body>
+</html>
