@@ -66,6 +66,33 @@ const SUPABASE_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
 const TABLE = "articles";
 const BUCKET = "article-images";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ===== ANALYTICS BOLATERKINI =====
+
+function getVisitorId() {
+  let id = localStorage.getItem("bolaVisitorId");
+
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("bolaVisitorId", id);
+  }
+
+  return id;
+}
+
+async function trackPageView(articleId = null) {
+  try {
+    await supabaseClient.rpc("track_page_view", {
+      p_visitor_id: getVisitorId(),
+      p_page_path: location.pathname,
+      p_article_id: articleId ? String(articleId) : null
+    });
+  } catch (error) {
+    console.error("Analytics error:", error);
+  }
+}
+
+// Catat kunjungan halaman
+trackPageView();
 const $ = id => document.getElementById(id);
 let articles = [], sessionUser = null;
 
