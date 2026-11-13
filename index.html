@@ -1521,10 +1521,15 @@ async function fetchAutomaticNews() {
    ================================================== */
 
 async function recordPageView() {
-  const {error} = await db.from("page_views").insert({});
+  const { error } = await db
+    .from("page_views")
+    .insert({
+      page_path: window.location.pathname,
+      visited_at: new Date().toISOString()
+    });
 
   if (error) {
-    console.warn("Kunjungan halaman tidak tercatat:",error.message);
+    console.warn("Kunjungan tidak tercatat:", error.message);
   }
 }
 
