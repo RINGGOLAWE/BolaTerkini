@@ -4,699 +4,652 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#081426">
+<meta name="description" content="BolaTerkini - Berita sepak bola terbaru, hasil pertandingan, jadwal, dan kabar transfer.">
 <title>BolaTerkini - Berita Sepak Bola</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --navy:#071a33;
-  --navy2:#102b4e;
-  --gold:#f5c451;
-  --bg:#f3f5f8;
+:root{
+  --navy:#081426;
+  --navy2:#10233d;
+  --gold:#e7b84b;
+  --gold2:#f5d887;
   --white:#fff;
-  --text:#172338;
   --muted:#718096;
-  --border:#e4e9f0;
+  --bg:#f3f5f8;
+  --line:#e6eaf0;
+  --green:#16865b;
+  --red:#d74444;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-header{
-  background:var(--navy);
-  color:white;
-  padding:20px 5%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
-}
-.logo{font-size:25px;font-weight:900}
-.logo span{color:var(--gold)}
-nav{display:flex;gap:18px;flex-wrap:wrap}
-nav a{
-  color:white;text-decoration:none;font-weight:bold;
-  cursor:pointer;font-size:14px
-}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#172033}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.topbar{background:#050d19;color:#d8e0eb;padding:9px 5%;font-size:12px;display:flex;justify-content:space-between;gap:12px}
+header{background:var(--navy);color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-size:27px;font-weight:900;letter-spacing:-1px}
+.brand span{color:var(--gold)}
+.header-actions{display:flex;gap:10px;align-items:center}
+.btn{border:0;border-radius:8px;padding:11px 16px;font-weight:700}
+.btn-gold{background:var(--gold);color:#172033}
+.btn-dark{background:var(--navy);color:white}
+.btn-light{background:#eef1f5;color:#253247}
+.btn-danger{background:#ffe8e8;color:#a52626}
+.btn-small{padding:7px 10px;font-size:12px}
+nav{background:var(--navy2);padding:0 5%;display:flex;gap:25px;overflow:auto;color:#e9edf3}
+nav a{padding:14px 0;white-space:nowrap;font-size:13px;font-weight:bold}
 nav a:hover{color:var(--gold)}
-.hero{
-  background:linear-gradient(120deg,#071a33,#17436d);
-  color:white;padding:55px 6%;
+.container{width:min(1180px,92%);margin:25px auto}
+.breaking{background:#fff;border:1px solid var(--line);border-left:5px solid var(--red);padding:13px 16px;border-radius:8px;display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.breaking strong{color:var(--red);white-space:nowrap}
+.hero{background:linear-gradient(110deg,#081426,#193454);color:white;border-radius:14px;padding:35px;margin-bottom:25px;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:190px}
+.hero h1{font-size:clamp(27px,4vw,42px);margin:0 0 12px}
+.hero p{color:#c5d0df;line-height:1.6;max-width:600px;margin:0}
+.hero-tag{color:var(--gold);font-size:12px;font-weight:bold;letter-spacing:2px;margin-bottom:10px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:28px 0 15px}
+.section-head h2{font-size:21px;margin:0}
+.section-head h2:before{content:"";display:inline-block;width:5px;height:21px;background:var(--gold);margin-right:10px;vertical-align:middle;border-radius:3px}
+.search-row{display:flex;gap:8px;max-width:420px;width:100%}
+.search-row input{min-width:0;flex:1;padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:white}
+.news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.news-card{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.2s}
+.news-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px #13233a12}
+.news-image{height:190px;background:#dce3ec;overflow:hidden}
+.news-image img{width:100%;height:100%;object-fit:cover}
+.news-body{padding:16px}
+.category{color:#9a6b0a;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.news-body h3{font-size:17px;line-height:1.4;margin:9px 0}
+.news-body p{font-size:13px;color:#657286;line-height:1.6}
+.meta{font-size:11px;color:#8792a2;margin-top:13px}
+.empty{grid-column:1/-1;background:white;padding:35px;text-align:center;border-radius:10px;color:var(--muted)}
+footer{margin-top:50px;background:var(--navy);color:#d5deea;padding:35px 5%;text-align:center}
+footer strong{color:var(--gold)}
+.modal{display:none;position:fixed;inset:0;background:#07101dcc;z-index:20;padding:20px;overflow:auto}
+.modal.show{display:flex;align-items:center;justify-content:center}
+.modal-box{background:white;width:min(720px,100%);border-radius:14px;padding:24px;position:relative;margin:auto}
+.close{position:absolute;right:15px;top:12px;border:0;background:#edf0f4;border-radius:50%;width:34px;height:34px;font-size:19px}
+.modal-box h2{margin-top:0}
+.field{margin:13px 0}
+.field label{display:block;font-size:12px;font-weight:bold;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;border:1px solid #dce2ea;border-radius:8px;padding:11px;background:white}
+.field textarea{min-height:130px;resize:vertical}
+.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.admin-shell{display:none}
+.admin-shell.active{display:block}
+.admin-top{background:var(--navy);color:white;padding:22px;border-radius:12px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:15px 0}
+.stat{background:white;border:1px solid var(--line);padding:18px;border-radius:11px}
+.stat small{color:var(--muted);font-weight:bold}
+.stat strong{display:block;font-size:27px;margin-top:9px;color:var(--navy)}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:white;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;min-width:0}
+.panel h3{margin:0 0 15px}
+.article-row{padding:13px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}
+.article-row:last-child{border:0}
+.article-row strong{font-size:13px;display:block}
+.article-row small{color:var(--muted);font-size:11px}
+.row-actions{display:flex;gap:5px;flex-wrap:wrap}
+.status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:bold;background:#fff1d2;color:#805b08}
+.status.published{background:#dff5e9;color:#176b43}
+.admin-nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.admin-nav button.active{background:var(--gold);color:#172033}
+.hidden{display:none!important}
+.notice{padding:12px;border-radius:8px;background:#fff4d8;color:#76520a;font-size:13px;margin:12px 0}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10233d;color:white;padding:12px 18px;border-radius:9px;z-index:50;display:none;max-width:90%;font-size:13px}
+.article-content{line-height:1.8;color:#354154;white-space:pre-wrap}
+.article-cover{width:100%;max-height:360px;object-fit:cover;border-radius:10px;margin:12px 0}
+@media(max-width:850px){
+ .news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .stats{grid-template-columns:repeat(2,1fr)}
 }
-.hero h1{font-size:38px;margin:0 0 12px}
-.hero p{color:#d5deeb;max-width:600px;line-height:1.6}
-.container{width:90%;max-width:1200px;margin:30px auto}
-.section-title{
-  border-left:5px solid var(--gold);
-  padding-left:12px;margin-bottom:20px
-}
-.news-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:20px
-}
-.news-card{
-  background:white;border-radius:12px;overflow:hidden;
-  box-shadow:0 4px 16px #14233b0c;cursor:pointer;
-  transition:.2s
-}
-.news-card:hover{transform:translateY(-4px)}
-.news-card img{
-  width:100%;height:190px;object-fit:cover;
-  background:#dce3ed
-}
-.news-content{padding:17px}
-.category{
-  color:#9b741c;font-size:12px;font-weight:bold;
-  text-transform:uppercase
-}
-.news-content h3{margin:9px 0;line-height:1.4}
-.news-content p{color:var(--muted);font-size:13px;line-height:1.5}
-.meta{font-size:12px;color:var(--muted)}
-.empty{
-  background:white;padding:30px;border-radius:12px;
-  text-align:center;color:var(--muted)
-}
-button{
-  border:0;border-radius:8px;padding:11px 15px;
-  font-weight:bold;cursor:pointer;font-size:13px
-}
-button:disabled{opacity:.5;cursor:not-allowed}
-.primary{background:var(--gold);color:var(--navy)}
-.dark{background:var(--navy);color:white}
-.danger{background:#ffe5e5;color:#b42318}
-.secondary{background:#e8edf4;color:#26384f}
-.success{background:#dff7e8;color:#176b3a}
-.admin-wrap{display:none}
-.admin-top{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:12px;flex-wrap:wrap
-}
-.stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:12px;margin:20px 0
-}
-.stat{
-  background:white;padding:18px;border-radius:12px;
-  border:1px solid var(--border)
-}
-.stat strong{display:block;font-size:26px;color:var(--navy)}
-.stat span{font-size:12px;color:var(--muted)}
-.admin-columns{
-  display:grid;grid-template-columns:1fr 1fr;gap:20px
-}
-.panel{
-  background:white;border-radius:12px;padding:18px;
-  border:1px solid var(--border);min-width:0
-}
-.panel h3{margin-top:0}
-.article-row{
-  border:1px solid var(--border);border-radius:10px;
-  padding:13px;margin:12px 0
-}
-.article-row h4{margin:0 0 8px}
-.article-row small{color:var(--muted)}
-.actions{
-  display:flex;gap:7px;flex-wrap:wrap;margin-top:12px
-}
-.actions button{flex:1;min-width:90px}
-.status{
-  display:inline-block;border-radius:20px;
-  padding:5px 9px;font-size:11px;font-weight:bold
-}
-.status.draft{background:#fff2d5;color:#936300}
-.status.published{background:#dcf7e5;color:#176b3a}
-.form-box{
-  background:white;border-radius:12px;padding:20px;
-  margin:20px 0;border:1px solid var(--border)
-}
-.form-box input,.form-box textarea,.form-box select{
-  display:block;width:100%;padding:12px;
-  border:1px solid #dce2eb;border-radius:8px;
-  margin:8px 0 15px;font:inherit;background:white
-}
-.form-box textarea{min-height:130px;resize:vertical}
-.form-box label{font-size:13px;font-weight:bold}
-.form-buttons{display:flex;gap:10px;flex-wrap:wrap}
-.notice{font-size:13px;margin:10px 0;line-height:1.5}
-.notice.error{color:#b42318}
-.notice.ok{color:#176b3a}
-.modal{
-  display:none;position:fixed;inset:0;background:#071a33cc;
-  z-index:20;padding:20px;overflow:auto
-}
-.modal-content{
-  background:white;max-width:750px;margin:30px auto;
-  border-radius:14px;padding:25px
-}
-.modal-content img{
-  width:100%;max-height:350px;object-fit:cover;
-  border-radius:10px
-}
-footer{
-  background:var(--navy);color:#d4deea;
-  padding:25px;text-align:center;margin-top:50px
-}
-@media(max-width:800px){
-  .news-grid{grid-template-columns:repeat(2,1fr)}
-  .admin-columns{grid-template-columns:1fr}
-}
-@media(max-width:550px){
-  header{padding:17px 5%}
-  .logo{font-size:22px}
-  nav{gap:12px}
-  nav a{font-size:12px}
-  .hero{padding:38px 5%}
-  .hero h1{font-size:29px}
-  .container{width:92%}
-  .news-grid{grid-template-columns:1fr}
-  .news-card img{height:210px}
-  .stats{grid-template-columns:1fr 1fr}
-  .stat:last-child{grid-column:span 2}
-  .admin-top button{width:100%}
-  .actions button{min-height:42px}
-  .panel,.form-box{padding:14px}
+@media(max-width:600px){
+ header{padding:15px 4%;flex-wrap:wrap}
+ .brand{font-size:23px}
+ .topbar{padding:8px 4%}
+ nav{padding:0 4%;gap:18px}
+ .container{width:92%;margin:18px auto}
+ .hero{padding:24px;min-height:0}
+ .news-grid{grid-template-columns:1fr}
+ .news-image{height:210px}
+ .section-head{align-items:flex-start;flex-direction:column}
+ .admin-grid{grid-template-columns:1fr}
+ .stats{gap:8px}
+ .stat{padding:13px}
+ .stat strong{font-size:23px}
+ .admin-top{align-items:flex-start;flex-direction:column}
+ .article-row{align-items:flex-start;flex-direction:column}
 }
 </style>
 </head>
 <body>
-
+<div class="topbar">
+  <span>Portal Berita Sepak Bola Indonesia</span>
+  <span id="todayText">BolaTerkini</span>
+</div>
 <header>
-  <div class="logo">BOLA<span>TERKINI</span></div>
-  <nav>
-    <a onclick="showPage('home')">Beranda</a>
-    <a onclick="showPage('home')">Berita</a>
-    <a onclick="showAdminLogin()">Admin</a>
-  </nav>
+  <a class="brand" href="#" onclick="showHome()">BOLA<span>TERKINI</span></a>
+  <div class="header-actions">
+    <button class="btn btn-gold" onclick="openLogin()">Login Admin</button>
+  </div>
 </header>
+<nav>
+  <a href="#" onclick="showHome()">BERANDA</a>
+  <a href="#berita">BERITA TERBARU</a>
+  <a href="#populer">POPULER</a>
+  <a href="#breaking">BREAKING NEWS</a>
+</nav>
 
-<section class="hero" id="hero">
-  <h1>Kabar Sepak Bola Terkini</h1>
-  <p>Update berita sepak bola nasional dan internasional, informasi klub, pertandingan, dan perkembangan terbaru dunia sepak bola.</p>
-</section>
-
-<main class="container" id="homePage">
-  <h2 class="section-title">Berita Terbaru</h2>
-  <div id="publicNews" class="news-grid">
+<main class="container" id="publicPage">
+  <div class="breaking" id="breaking">
+    <strong>BREAKING NEWS</strong>
+    <span id="breakingText">Memuat kabar terbaru...</span>
+  </div>
+  <section class="hero">
+    <div>
+      <div class="hero-tag">INFORMASI SEPAK BOLA TERKINI</div>
+      <h1>Semua Kabar Bola,<br>Dalam Satu Genggaman.</h1>
+      <p>Ikuti berita sepak bola Indonesia dan dunia, kabar transfer, hasil pertandingan, serta informasi terbaru dari lapangan hijau.</p>
+    </div>
+  </section>
+  <div class="section-head" id="berita">
+    <h2>Berita Terbaru</h2>
+    <div class="search-row">
+      <input id="searchInput" type="search" placeholder="Cari berita..." oninput="renderNews()">
+      <button class="btn btn-dark" onclick="renderNews()">Cari</button>
+    </div>
+  </div>
+  <div class="news-grid" id="newsGrid">
     <div class="empty">Memuat berita...</div>
   </div>
+  <div class="section-head" id="populer"><h2>Berita Populer</h2></div>
+  <div class="news-grid" id="popularGrid">
+    <div class="empty">Memuat berita populer...</div>
+  </div>
 </main>
 
-<main class="container admin-wrap" id="adminPage">
+<main class="container admin-shell" id="adminPage">
   <div class="admin-top">
-    <div>
-      <h2 class="section-title">Dashboard Admin</h2>
-      <p class="meta">Kelola berita sebelum ditampilkan kepada pembaca.</p>
-    </div>
-    <button class="danger" onclick="logoutAdmin()">Keluar Admin</button>
+    <div><div class="hero-tag">PUSAT KENDALI</div><h1 style="margin:0">Dashboard Admin</h1><small>Kelola konten BolaTerkini</small></div>
+    <button class="btn btn-gold" onclick="logoutAdmin()">Keluar</button>
   </div>
-
   <div class="stats">
-    <div class="stat"><strong id="totalDraft">0</strong><span>Berita Draft</span></div>
-    <div class="stat"><strong id="totalPublished">0</strong><span>Berita Terbit</span></div>
-    <div class="stat"><strong id="totalAll">0</strong><span>Total Artikel</span></div>
+    <div class="stat"><small>Total Kunjungan</small><strong id="statVisits">0</strong></div>
+    <div class="stat"><small>Kunjungan Hari Ini</small><strong id="statToday">0</strong></div>
+    <div class="stat"><small>Total Artikel</small><strong id="statArticles">0</strong></div>
+    <div class="stat"><small>Artikel Draft</small><strong id="statDrafts">0</strong></div>
   </div>
-
-  <div class="form-box">
-    <h3 id="formHeading">Tambah Berita Baru</h3>
-    <form id="articleForm">
-      <input type="hidden" id="articleId">
-      <label>Judul Berita</label>
-      <input id="title" required placeholder="Masukkan judul berita">
-      <label>Kategori</label>
-      <select id="category">
-        <option>Nasional</option>
-        <option>Internasional</option>
-        <option>Transfer</option>
-        <option>Timnas</option>
-        <option>Liga Indonesia</option>
-        <option>Premier League</option>
-        <option>La Liga</option>
-        <option>Champions League</option>
-      </select>
-      <label>Isi Berita</label>
-      <textarea id="content" required placeholder="Tulis isi berita..."></textarea>
-      <label>URL Gambar</label>
-      <input id="imageUrl" type="url" placeholder="https://contoh.com/gambar.jpg">
-      <label>Nama Sumber</label>
-      <input id="sourceName" placeholder="Contoh: Situs resmi klub">
-      <label>URL Sumber</label>
-      <input id="sourceUrl" type="url" placeholder="https://...">
-      <div class="form-buttons">
-        <button class="primary" type="submit" id="saveButton">Simpan sebagai Draft</button>
-        <button class="secondary" type="button" onclick="resetForm()">Batal</button>
+  <div class="admin-nav">
+    <button class="btn btn-light active" id="tabArticles" onclick="showAdminTab('articles')">Artikel</button>
+    <button class="btn btn-light" id="tabAnalytics" onclick="showAdminTab('analytics')">Analitik</button>
+    <button class="btn btn-light" id="tabAuto" onclick="showAdminTab('auto')">Berita Otomatis</button>
+  </div>
+  <section id="adminArticles">
+    <div class="admin-grid">
+      <div class="panel">
+        <h3 id="formHeading">Tulis Berita Baru</h3>
+        <form id="articleForm">
+          <input type="hidden" id="articleId">
+          <div class="field"><label>Judul Berita</label><input id="articleTitle" required maxlength="180" placeholder="Masukkan judul berita"></div>
+          <div class="field"><label>Kategori</label>
+            <select id="articleCategory">
+              <option>Nasional</option><option>Internasional</option><option>Liga Inggris</option><option>Liga Spanyol</option><option>Liga Italia</option><option>Liga Indonesia</option><option>Champions League</option><option>Transfer</option><option>Timnas</option>
+            </select>
+          </div>
+          <div class="field"><label>URL Gambar</label><input id="articleImage" type="url" placeholder="https://..."></div>
+          <div class="field"><label>Isi Berita</label><textarea id="articleContent" required placeholder="Tulis ringkasan berita dengan kata-katamu sendiri..."></textarea></div>
+          <div class="field"><label>Nama Sumber</label><input id="articleSource" placeholder="Contoh: Situs resmi klub"></div>
+          <div class="field"><label>Link Sumber</label><input id="articleSourceUrl" type="url" placeholder="https://..."></div>
+          <div class="field"><label><input type="checkbox" id="articleBreaking" style="width:auto"> Tandai sebagai Breaking News</label></div>
+          <div class="form-actions">
+            <button class="btn btn-gold" type="submit">Simpan Draft</button>
+            <button class="btn btn-dark" type="button" onclick="saveArticle(true)">Terbitkan</button>
+            <button class="btn btn-light" type="button" onclick="resetArticleForm()">Reset</button>
+          </div>
+        </form>
       </div>
-      <div id="adminNotice" class="notice"></div>
+      <div class="panel">
+        <h3>Daftar Artikel</h3>
+        <div class="admin-nav">
+          <button class="btn btn-light btn-small active" id="filterAll" onclick="setArticleFilter('all')">Semua</button>
+          <button class="btn btn-light btn-small" id="filterDraft" onclick="setArticleFilter('draft')">Draft</button>
+          <button class="btn btn-light btn-small" id="filterPublished" onclick="setArticleFilter('published')">Terbit</button>
+        </div>
+        <div id="adminArticleList">Memuat artikel...</div>
+      </div>
+    </div>
+  </section>
+  <section id="adminAnalytics" class="hidden">
+    <div class="panel">
+      <h3>Statistik Kunjungan</h3>
+      <p id="analyticsSummary">Memuat data statistik...</p>
+      <div id="dailyStats"></div>
+      <p class="meta">Statistik menghitung kunjungan halaman, bukan jumlah orang unik. Tidak menyimpan alamat IP pengunjung.</p>
+    </div>
+  </section>
+  <section id="adminAuto" class="hidden">
+    <div class="panel">
+      <h3>Pengambilan Berita Otomatis</h3>
+      <p>Ambil berita dari sumber yang sudah diatur pada Edge Function. Berita baru akan masuk sebagai draft agar admin dapat memeriksa sebelum diterbitkan.</p>
+      <div class="notice">Pastikan Edge Function bernama <b>rapid-worker</b> sudah dibuat dan mengembalikan daftar artikel dalam properti <code>articles</code>.</div>
+      <button class="btn btn-gold" onclick="fetchFootballNews()">Periksa Berita Baru</button>
+      <p id="autoStatus" class="meta"></p>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="loginModal">
+  <div class="modal-box" style="max-width:420px">
+    <button class="close" onclick="closeModal('loginModal')">×</button>
+    <h2>Login Admin</h2>
+    <p class="meta">Masuk menggunakan akun Supabase yang sudah didaftarkan sebagai admin.</p>
+    <form id="loginForm">
+      <div class="field"><label>Email</label><input id="loginEmail" type="email" required autocomplete="username"></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+      <button class="btn btn-gold" style="width:100%">Masuk Dashboard</button>
     </form>
   </div>
-
-  <div class="admin-top">
-    <h3>Manajemen Berita</h3>
-    <button class="secondary" onclick="loadAdminArticles()">↻ Segarkan</button>
-  </div>
-
-  <div class="admin-columns">
-    <section class="panel">
-      <h3>📝 Draft <span id="draftCount">(0)</span></h3>
-      <p class="meta">Belum ditampilkan kepada publik.</p>
-      <div id="draftList"></div>
-    </section>
-    <section class="panel">
-      <h3>🌐 Berita Terbit <span id="publishedCount">(0)</span></h3>
-      <p class="meta">Sudah tampil di halaman utama.</p>
-      <div id="publishedList"></div>
-    </section>
-  </div>
-</main>
-
-<div class="modal" id="articleModal" onclick="if(event.target===this)closeArticle()">
-  <div class="modal-content">
-    <button class="secondary" onclick="closeArticle()">✕ Tutup</button>
+</div>
+<div class="modal" id="articleModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('articleModal')">×</button>
     <div id="articleDetail"></div>
   </div>
 </div>
-
-<div class="modal" id="loginModal" onclick="if(event.target===this)closeLogin()">
-  <div class="modal-content" style="max-width:400px">
-    <h2>Login Admin</h2>
-    <form id="loginForm">
-      <label>Email</label>
-      <input id="loginEmail" type="email" required style="width:100%;padding:12px;margin:8px 0">
-      <label>Password</label>
-      <input id="loginPassword" type="password" required style="width:100%;padding:12px;margin:8px 0">
-      <button class="primary" style="width:100%">Masuk</button>
-      <div id="loginNotice" class="notice"></div>
-    </form>
-    <button class="secondary" onclick="closeLogin()">Batal</button>
-  </div>
-</div>
-
-<footer>
-  <strong>BOLATERKINI</strong>
-  <p>Informasi sepak bola terkini dan terpercaya.</p>
-  <small>© 2026 BolaTerkini</small>
-</footer>
+<div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL = "https://hbpwpesycrpfiqsdaqbn.supabase.co";
-const SUPABASE_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const SUPABASE_ANON_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let articles = [];
 let isAdmin = false;
+let articleFilter = "all";
 
 const $ = id => document.getElementById(id);
 
-function escapeHTML(value="") {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#039;"
-  })[char]);
+function escapeHTML(value=""){
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
-
-function safeURL(value) {
-  try {
-    const url = new URL(value);
-    return ["http:","https:"].includes(url.protocol) ? url.href : "";
-  } catch {
-    return "";
-  }
+function safeURL(value){
+  try{
+    const u = new URL(value);
+    return ["https:","http:"].includes(u.protocol) ? u.href : "";
+  }catch{return "";}
 }
-
-function formatDate(value) {
-  return new Date(value).toLocaleDateString("id-ID", {
-    day:"numeric",month:"long",year:"numeric"
+function formatDate(value){
+  if(!value) return "";
+  return new Date(value).toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+}
+function toast(message){
+  $("toast").textContent=message;
+  $("toast").style.display="block";
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>$("toast").style.display="none",3000);
+}
+function closeModal(id){$(id).classList.remove("show")}
+function openLogin(){$("loginModal").classList.add("show")}
+function showHome(){
+  $("publicPage").classList.remove("hidden");
+  $("adminPage").classList.remove("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showAdmin(){
+  $("publicPage").classList.add("hidden");
+  $("adminPage").classList.add("active");
+  loadAdminData();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showAdminTab(tab){
+  ["articles","analytics","auto"].forEach(name=>{
+    $("admin"+name[0].toUpperCase()+name.slice(1)).classList.toggle("hidden",name!==tab);
+    $("tab"+name[0].toUpperCase()+name.slice(1)).classList.toggle("active",name===tab);
   });
+  if(tab==="analytics") loadAnalytics();
 }
-
-function showPage(page) {
-  $("homePage").style.display = page === "home" ? "block" : "none";
-  $("hero").style.display = page === "home" ? "block" : "none";
-  $("adminPage").style.display = page === "admin" && isAdmin ? "block" : "none";
-  window.scrollTo(0,0);
+function setArticleFilter(filter){
+  articleFilter=filter;
+  ["All","Draft","Published"].forEach(n=>$("filter"+n).classList.toggle("active",n.toLowerCase()===filter));
+  renderAdminArticles();
 }
-
-function showAdminLogin() {
-  if (isAdmin) {
-    showPage("admin");
-    loadAdminArticles();
-  } else {
-    $("loginModal").style.display = "block";
+async function recordVisit(articleId=null){
+  try{
+    const row={};
+    if(articleId!==null) row.article_id=articleId;
+    await db.from("page_views").insert(row);
+  }catch(e){console.warn("Statistik kunjungan tidak tersimpan:",e.message)}
+}
+async function loadPublicNews(){
+  const {data,error}=await db.from("articles")
+    .select("id,title,category,content,image_url,source_name,source_url,is_published,is_breaking,created_at")
+    .eq("is_published",true).order("created_at",{ascending:false}).limit(60);
+  if(error){$("newsGrid").innerHTML='<div class="empty">Berita belum dapat dimuat. Periksa koneksi database dan kebijakan akses Supabase.</div>';return}
+  articles=data||[];
+  renderNews();
+  renderBreaking();
+}
+function cardHTML(a){
+  const image=safeURL(a.image_url);
+  const excerpt=(a.content||"").replace(/\s+/g," ").slice(0,125);
+  return `<article class="news-card" onclick="openArticle('${String(a.id).replace(/'/g,"")}')">
+    <div class="news-image">${image?`<img src="${escapeHTML(image)}" alt="${escapeHTML(a.title)}" loading="lazy">`:""}</div>
+    <div class="news-body">
+      <div class="category">${escapeHTML(a.category||"Sepak Bola")}${a.is_breaking?' · BREAKING':''}</div>
+      <h3>${escapeHTML(a.title)}</h3>
+      <p>${escapeHTML(excerpt)}${excerpt.length>=125?"...":""}</p>
+      <div class="meta">${formatDate(a.created_at)}</div>
+    </div>
+  </article>`;
+}
+function renderNews(){
+  const q=($("searchInput")?.value||"").toLowerCase().trim();
+  const list=articles.filter(a=>(a.title+" "+a.content+" "+a.category).toLowerCase().includes(q));
+  $("newsGrid").innerHTML=list.length?list.map(cardHTML).join(""):'<div class="empty">Tidak ada berita yang cocok dengan pencarian.</div>';
+  const popular=[...articles].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,3);
+  $("popularGrid").innerHTML=popular.length?popular.map(cardHTML).join(""):'<div class="empty">Belum ada berita populer.</div>';
+}
+function renderBreaking(){
+  const item=articles.find(a=>a.is_breaking);
+  $("breakingText").textContent=item?item.title:"Ikuti terus perkembangan berita sepak bola terbaru di BolaTerkini.";
+}
+async function openArticle(id){
+  let item=articles.find(a=>String(a.id)===String(id));
+  if(!item){
+    const {data}=await db.from("articles").select("*").eq("id",id).maybeSingle();
+    item=data;
   }
+  if(!item)return;
+  recordVisit(item.id);
+  const img=safeURL(item.image_url);
+  const source=safeURL(item.source_url);
+  $("articleDetail").innerHTML=`
+    <div class="category">${escapeHTML(item.category||"Sepak Bola")}</div>
+    <h2>${escapeHTML(item.title)}</h2>
+    <div class="meta">${formatDate(item.created_at)}</div>
+    ${img?`<img class="article-cover" src="${escapeHTML(img)}" alt="${escapeHTML(item.title)}">`:""}
+    <div class="article-content">${escapeHTML(item.content||"")}</div>
+    ${item.source_name?`<p class="meta">Sumber: ${escapeHTML(item.source_name)} ${source?`· <a href="${escapeHTML(source)}" target="_blank" rel="noopener">Baca sumber</a>`:""}</p>`:""}
+    <button class="btn btn-dark" onclick="shareArticle('${String(item.id).replace(/'/g,"")}')">Bagikan Berita</button>`;
+  $("articleModal").classList.add("show");
+}
+async function shareArticle(id){
+  const url=location.href.split("#")[0]+"#artikel-"+encodeURIComponent(id);
+  const title=articles.find(a=>String(a.id)===String(id))?.title||"BolaTerkini";
+  try{
+    if(navigator.share) await navigator.share({title,url});
+    else if(navigator.clipboard){await navigator.clipboard.writeText(url);toast("Link berita disalin.");}
+    else toast("Salin alamat halaman untuk membagikan berita.");
+  }catch(e){}
 }
 
-function closeLogin() {
-  $("loginModal").style.display = "none";
+async function checkAdmin(){
+  const {data:{session}}=await db.auth.getSession();
+  if(!session){isAdmin=false;return false}
+  const {data,error}=await db.rpc("is_bolaterkini_admin");
+  isAdmin=!error && data===true;
+  return isAdmin;
 }
 
-function closeArticle() {
-  $("articleModal").style.display = "none";
-}
-
-function notice(message, type="") {
-  $("adminNotice").textContent = message;
-  $("adminNotice").className = "notice " + type;
-}
-
-async function loadPublicArticles() {
-  const container = $("publicNews");
-  const {data,error} = await supabaseClient
-    .from("articles")
-    .select("*")
-    .eq("is_published",true)
-    .order("created_at",{ascending:false});
-
-  if (error) {
-    container.innerHTML = '<div class="empty">Berita belum dapat dimuat. Periksa koneksi dan kebijakan database.</div>';
-    console.error(error);
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const email=$("loginEmail").value.trim();
+  const password=$("loginPassword").value;
+  const {error}=await db.auth.signInWithPassword({email,password});
+  if(error){toast("Login gagal: "+error.message);return}
+  const allowed=await checkAdmin();
+  if(!allowed){
+    await db.auth.signOut();
+    toast("Akun ini belum terdaftar sebagai admin.");
     return;
   }
-
-  if (!data || !data.length) {
-    container.innerHTML = '<div class="empty">Belum ada berita yang diterbitkan.</div>';
-    return;
-  }
-
-  container.innerHTML = data.map(article => {
-    const image = safeURL(article.image_url);
-    return `
-      <article class="news-card" onclick="openArticle('${article.id}')">
-        <img src="${escapeHTML(image || 'https://placehold.co/600x400/102b4e/ffffff?text=BolaTerkini')}" alt="">
-        <div class="news-content">
-          <span class="category">${escapeHTML(article.category)}</span>
-          <h3>${escapeHTML(article.title)}</h3>
-          <p>${escapeHTML((article.content || "").slice(0,120))}...</p>
-          <div class="meta">${formatDate(article.created_at)}</div>
-        </div>
-      </article>`;
-  }).join("");
-}
-
-function openArticle(id) {
-  const article = articles.find(item => String(item.id) === String(id));
-  if (!article) {
-    loadArticleDetail(id);
-    return;
-  }
-  displayArticle(article);
-}
-
-async function loadArticleDetail(id) {
-  const {data,error} = await supabaseClient
-    .from("articles").select("*").eq("id",id)
-    .eq("is_published",true).single();
-
-  if (error || !data) return;
-  displayArticle(data);
-}
-
-function displayArticle(article) {
-  const image = safeURL(article.image_url);
-  const source = safeURL(article.source_url);
-  $("articleDetail").innerHTML = `
-    ${image ? `<img src="${escapeHTML(image)}" alt="">` : ""}
-    <span class="category">${escapeHTML(article.category)}</span>
-    <h1>${escapeHTML(article.title)}</h1>
-    <p class="meta">${formatDate(article.created_at)}</p>
-    <div style="line-height:1.8;white-space:pre-wrap">${escapeHTML(article.content)}</div>
-    ${source ? `<p>Sumber: <a href="${escapeHTML(source)}" target="_blank" rel="noopener">${escapeHTML(article.source_name || "Baca sumber")}</a></p>` : ""}
-  `;
-  $("articleModal").style.display = "block";
-}
-
-$("loginForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-  $("loginNotice").textContent = "Memeriksa akun...";
-
-  const {error} = await supabaseClient.auth.signInWithPassword({
-    email:$("loginEmail").value.trim(),
-    password:$("loginPassword").value
-  });
-
-  if (error) {
-    $("loginNotice").textContent = error.message;
-    return;
-  }
-
-  closeLogin();
-  await checkAdminSession();
+  closeModal("loginModal");
+  toast("Login admin berhasil.");
+  showAdmin();
 });
 
-async function checkAdminSession() {
-  const {data} = await supabaseClient.auth.getSession();
-  isAdmin = !!data.session;
-
-  if (isAdmin) {
-    showPage("admin");
-    await loadAdminArticles();
-  } else {
-    showPage("home");
-  }
+async function logoutAdmin(){
+  await db.auth.signOut();
+  isAdmin=false;
+  $("adminPage").classList.remove("active");
+  $("publicPage").classList.remove("hidden");
+  toast("Kamu sudah keluar dari dashboard.");
 }
 
-async function logoutAdmin() {
-  await supabaseClient.auth.signOut();
-  isAdmin = false;
-  showPage("home");
-}
-
-async function loadAdminArticles() {
-  if (!isAdmin) return;
-
-  const {data,error} = await supabaseClient
-    .from("articles")
-    .select("*")
-    .order("created_at",{ascending:false});
-
-  if (error) {
-    notice("Gagal memuat artikel: " + error.message,"error");
+async function loadAdminData(){
+  if(!await checkAdmin()){
+    toast("Akses admin tidak tersedia.");
+    showHome();
     return;
   }
-
-  articles = data || [];
+  const {data,error}=await db.from("articles")
+    .select("*").order("created_at",{ascending:false});
+  if(error){toast("Gagal memuat artikel: "+error.message);return}
+  articles=data||[];
+  $("statArticles").textContent=articles.length;
+  $("statDrafts").textContent=articles.filter(a=>!a.is_published).length;
   renderAdminArticles();
-  loadPublicArticles();
+  loadAnalytics();
 }
 
-function renderAdminArticles() {
-  const drafts = articles.filter(a=>!a.is_published);
-  const published = articles.filter(a=>a.is_published);
-
-  $("totalDraft").textContent = drafts.length;
-  $("totalPublished").textContent = published.length;
-  $("totalAll").textContent = articles.length;
-  $("draftCount").textContent = `(${drafts.length})`;
-  $("publishedCount").textContent = `(${published.length})`;
-
-  $("draftList").innerHTML = drafts.length
-    ? drafts.map(a=>articleAdminCard(a,false)).join("")
-    : '<div class="empty">Belum ada berita Draft.</div>';
-
-  $("publishedList").innerHTML = published.length
-    ? published.map(a=>articleAdminCard(a,true)).join("")
-    : '<div class="empty">Belum ada berita terbit.</div>';
-}
-
-function articleAdminCard(a,published) {
-  return `
+function renderAdminArticles(){
+  let list=articles;
+  if(articleFilter==="draft")list=list.filter(a=>!a.is_published);
+  if(articleFilter==="published")list=list.filter(a=>a.is_published);
+  if(!list.length){
+    $("adminArticleList").innerHTML='<p class="meta">Belum ada artikel pada kategori ini.</p>';
+    return;
+  }
+  $("adminArticleList").innerHTML=list.map(a=>`
     <div class="article-row">
-      <span class="status ${published?'published':'draft'}">${published?'TERBIT':'DRAFT'}</span>
-      <h4>${escapeHTML(a.title)}</h4>
-      <small>${escapeHTML(a.category)} · ${formatDate(a.created_at)}</small>
-      <div class="actions">
-        <button class="secondary" onclick="editArticle('${a.id}')">Edit</button>
-        <button class="${published?'secondary':'success'}"
-          onclick="setArticleStatus('${a.id}',${published?'false':'true'})">
-          ${published?'Jadikan Draft':'Terbitkan'}
-        </button>
-        <button class="danger" onclick="deleteArticle('${a.id}')">Hapus</button>
+      <div>
+        <strong>${escapeHTML(a.title)}</strong>
+        <small>${escapeHTML(a.category||"Umum")} · ${formatDate(a.created_at)}</small>
+        <div style="margin-top:6px">
+          <span class="status ${a.is_published?'published':''}">${a.is_published?'TERBIT':'DRAFT'}</span>
+          ${a.is_breaking?'<span class="status">BREAKING</span>':""}
+        </div>
       </div>
-    </div>`;
+      <div class="row-actions">
+        <button class="btn btn-light btn-small" onclick="editArticle('${String(a.id)}')">Edit</button>
+        <button class="btn btn-gold btn-small" onclick="togglePublish('${String(a.id)}',${!a.is_published})">${a.is_published?'Jadikan Draft':'Terbitkan'}</button>
+        <button class="btn btn-danger btn-small" onclick="deleteArticle('${String(a.id)}')">Hapus</button>
+      </div>
+    </div>
+  `).join("");
 }
 
-$("articleForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-  if (!isAdmin) return;
+function resetArticleForm(){
+  $("articleForm").reset();
+  $("articleId").value="";
+  $("formHeading").textContent="Tulis Berita Baru";
+}
 
-  const id = $("articleId").value;
-  const payload = {
-    title:$("title").value.trim(),
-    category:$("category").value,
-    content:$("content").value.trim(),
-    image_url:$("imageUrl").value.trim() || null,
-    source_name:$("sourceName").value.trim() || null,
-    source_url:$("sourceUrl").value.trim() || null
+function editArticle(id){
+  const a=articles.find(x=>String(x.id)===String(id));
+  if(!a)return;
+  $("articleId").value=a.id;
+  $("articleTitle").value=a.title||"";
+  $("articleCategory").value=a.category||"Nasional";
+  $("articleImage").value=a.image_url||"";
+  $("articleContent").value=a.content||"";
+  $("articleSource").value=a.source_name||"";
+  $("articleSourceUrl").value=a.source_url||"";
+  $("articleBreaking").checked=!!a.is_breaking;
+  $("formHeading").textContent="Edit Berita";
+  $("adminArticles").scrollIntoView({behavior:"smooth"});
+}
+
+$("articleForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  saveArticle(false);
+});
+
+async function saveArticle(publish){
+  if(!await checkAdmin()){toast("Sesi admin tidak valid.");return}
+  const id=$("articleId").value;
+  const title=$("articleTitle").value.trim();
+  const content=$("articleContent").value.trim();
+  if(!title||!content){toast("Judul dan isi berita wajib diisi.");return}
+  const image=$("articleImage").value.trim();
+  const sourceUrl=$("articleSourceUrl").value.trim();
+  if(image&&!safeURL(image)){toast("URL gambar harus menggunakan HTTP atau HTTPS.");return}
+  if(sourceUrl&&!safeURL(sourceUrl)){toast("Link sumber tidak valid.");return}
+
+  const payload={
+    title,
+    category:$("articleCategory").value,
+    content,
+    image_url:image||null,
+    source_name:$("articleSource").value.trim()||null,
+    source_url:sourceUrl||null,
+    is_published:!!publish,
+    is_breaking:$("articleBreaking").checked
   };
 
-  if (!payload.title || !payload.content) {
-    notice("Judul dan isi berita wajib diisi.","error");
-    return;
-  }
-
-  $("saveButton").disabled = true;
-  notice("Menyimpan artikel...");
-
   let result;
-
-  if (id) {
-    result = await supabaseClient
-      .from("articles").update(payload).eq("id",id);
-  } else {
-    result = await supabaseClient
-      .from("articles").insert({...payload,is_published:false});
+  if(id){
+    result=await db.from("articles").update(payload).eq("id",id);
+  }else{
+    result=await db.from("articles").insert(payload);
   }
-
-  $("saveButton").disabled = false;
-
-  if (result.error) {
-    notice("Gagal menyimpan: " + result.error.message,"error");
+  if(result.error){
+    toast("Gagal menyimpan: "+result.error.message);
     return;
   }
-
-  resetForm();
-  notice(id ? "Artikel berhasil diperbarui." : "Artikel berhasil disimpan sebagai Draft.","ok");
-  await loadAdminArticles();
-});
-
-function editArticle(id) {
-  const a = articles.find(item=>String(item.id)===String(id));
-  if (!a) return;
-
-  $("articleId").value = a.id;
-  $("title").value = a.title || "";
-  $("category").value = a.category || "Nasional";
-  $("content").value = a.content || "";
-  $("imageUrl").value = a.image_url || "";
-  $("sourceName").value = a.source_name || "";
-  $("sourceUrl").value = a.source_url || "";
-  $("formHeading").textContent = "Edit Berita";
-  $("saveButton").textContent = "Simpan Perubahan";
-  $("adminPage").scrollIntoView({behavior:"smooth"});
+  toast(publish?"Berita berhasil diterbitkan.":"Berita berhasil disimpan sebagai draft.");
+  resetArticleForm();
+  await loadAdminData();
+  await loadPublicNews();
 }
 
-function resetForm() {
-  $("articleForm").reset();
-  $("articleId").value = "";
-  $("formHeading").textContent = "Tambah Berita Baru";
-  $("saveButton").textContent = "Simpan sebagai Draft";
+async function togglePublish(id,publish){
+  if(!await checkAdmin())return;
+  const {error}=await db.from("articles")
+    .update({is_published:publish}).eq("id",id);
+  if(error){toast("Gagal mengubah status: "+error.message);return}
+  toast(publish?"Berita diterbitkan.":"Berita dikembalikan ke draft.");
+  await loadAdminData();
+  await loadPublicNews();
 }
 
-async function setArticleStatus(id,status) {
-  if (!isAdmin) return;
-
-  const publish = status === "true";
-  const message = publish
-    ? "Terbitkan berita ini sekarang?"
-    : "Kembalikan berita ini menjadi Draft?";
-
-  if (!confirm(message)) return;
-
-  const {error} = await supabaseClient
-    .from("articles")
-    .update({is_published:publish})
-    .eq("id",id);
-
-  if (error) {
-    alert("Gagal mengubah status: " + error.message);
-    return;
-  }
-
-  await loadAdminArticles();
+async function deleteArticle(id){
+  if(!confirm("Yakin ingin menghapus artikel ini?"))return;
+  if(!await checkAdmin())return;
+  const {error}=await db.from("articles").delete().eq("id",id);
+  if(error){toast("Gagal menghapus: "+error.message);return}
+  toast("Artikel berhasil dihapus.");
+  await loadAdminData();
+  await loadPublicNews();
 }
 
-async function deleteArticle(id) {
-  if (!isAdmin || !confirm("Hapus berita ini secara permanen?")) return;
-
-  const {error} = await supabaseClient
-    .from("articles").delete().eq("id",id);
-
-  if (error) {
-    alert("Gagal menghapus: " + error.message);
+async function loadAnalytics(){
+  if(!await checkAdmin())return;
+  const {data,error}=await db.from("page_views")
+    .select("id,visited_at").order("visited_at",{ascending:false}).limit(10000);
+  if(error){
+    $("analyticsSummary").textContent="Statistik belum dapat dibaca. Periksa kebijakan RLS tabel page_views.";
     return;
   }
+  const rows=data||[];
+  const today=new Date();
+  const startToday=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+  const todayCount=rows.filter(x=>new Date(x.visited_at)>=startToday).length;
+  $("statVisits").textContent=rows.length.toLocaleString("id-ID");
+  $("statToday").textContent=todayCount.toLocaleString("id-ID");
+  $("analyticsSummary").textContent=
+    `Tercatat ${rows.length.toLocaleString("id-ID")} kunjungan pada data yang dimuat, dengan ${todayCount.toLocaleString("id-ID")} kunjungan hari ini.`;
 
-  await loadAdminArticles();
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(today.getFullYear(),today.getMonth(),today.getDate()-i);
+    const next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
+    const count=rows.filter(x=>{
+      const t=new Date(x.visited_at);
+      return t>=d&&t<next;
+    }).length;
+    days.push({label:d.toLocaleDateString("id-ID",{day:"numeric",month:"short"}),count});
+  }
+  const max=Math.max(1,...days.map(d=>d.count));
+  $("dailyStats").innerHTML=days.map(d=>`
+    <div style="display:grid;grid-template-columns:75px 1fr 45px;gap:10px;align-items:center;margin:13px 0">
+      <small>${d.label}</small>
+      <div style="height:13px;background:#edf0f4;border-radius:20px;overflow:hidden">
+        <div style="height:100%;width:${d.count/max*100}%;background:#d9a82f;border-radius:20px"></div>
+      </div>
+      <strong style="font-size:12px">${d.count}</strong>
+    </div>
+  `).join("");
 }
 
-// Tombol ini disiapkan untuk Edge Function rapid-worker.
-// Fungsi tersebut harus dibuat dan diamankan di Supabase
-// sebelum fitur pengambilan berita otomatis digunakan.
-async function fetchFootballNews() {
-  if (!isAdmin) return;
-
-  if (!confirm("Ambil berita sepak bola ke daftar Draft?")) return;
-
-  notice("Menghubungi layanan berita otomatis...");
-
-  const {data,error} = await supabaseClient.functions.invoke(
-    "rapid-worker",
-    {body:{action:"fetch_news"}}
-  );
-
-  if (error) {
-    notice("Layanan rapid-worker belum tersedia atau gagal: " + error.message,"error");
-    return;
-  }
-
-  const incoming = Array.isArray(data) ? data : data?.articles;
-
-  if (!Array.isArray(incoming)) {
-    notice("Format data berita dari rapid-worker tidak sesuai.","error");
-    return;
-  }
-
-  let saved = 0;
-
-  for (const item of incoming) {
-    if (!item.title || !item.content) continue;
-
-    const payload = {
-      title:item.title,
-      content:item.content,
-      category:item.category || "Internasional",
-      image_url:item.image_url || null,
-      source_name:item.source_name || null,
-      source_url:item.source_url || null,
-      is_published:false
-    };
-
-    if (payload.source_url) {
-      const {data:existing} = await supabaseClient
-        .from("articles")
-        .select("id")
-        .eq("source_url",payload.source_url)
-        .limit(1);
-
-      if (existing?.length) continue;
+async function fetchFootballNews(){
+  if(!await checkAdmin()){toast("Login admin diperlukan.");return}
+  $("autoStatus").textContent="Menghubungi layanan berita...";
+  try{
+    const {data,error}=await db.functions.invoke("rapid-worker",{
+      body:{action:"fetch_news"}
+    });
+    if(error)throw error;
+    const incoming=Array.isArray(data?.articles)?data.articles:[];
+    if(!incoming.length){
+      $("autoStatus").textContent="Belum ada berita baru dari layanan otomatis.";
+      return;
     }
-
-    const {error:insertError} = await supabaseClient
-      .from("articles").insert(payload);
-
-    if (!insertError) saved++;
+    let added=0;
+    for(const item of incoming){
+      if(!item.title||!item.content)continue;
+      const sourceUrl=safeURL(item.source_url||"");
+      if(sourceUrl){
+        const {data:existing}=await db.from("articles")
+          .select("id").eq("source_url",sourceUrl).maybeSingle();
+        if(existing)continue;
+      }
+      const payload={
+        title:String(item.title).slice(0,180),
+        category:item.category||"Internasional",
+        content:String(item.content),
+        image_url:safeURL(item.image_url||"")||null,
+        source_name:item.source_name||"Sumber berita",
+        source_url:sourceUrl||null,
+        is_published:false,
+        is_breaking:false
+      };
+      const {error:insertError}=await db.from("articles").insert(payload);
+      if(!insertError)added++;
+    }
+    $("autoStatus").textContent=`Selesai. ${added} berita baru masuk ke draft untuk diperiksa.`;
+    await loadAdminData();
+    toast(`${added} berita baru masuk ke draft.`);
+  }catch(error){
+    $("autoStatus").textContent="Pengambilan berita gagal: "+(error.message||"Periksa Edge Function rapid-worker.");
+    toast("Layanan berita otomatis belum siap.");
   }
-
-  notice(`${saved} berita berhasil masuk ke Draft. Periksa isi dan sumber sebelum menerbitkan.`,"ok");
-  await loadAdminArticles();
 }
 
-supabaseClient.auth.onAuthStateChange((_event,session)=>{
-  isAdmin = !!session;
-  if (isAdmin) {
-    showPage("admin");
-    loadAdminArticles();
-  } else {
-    showPage("home");
-  }
-});
+async function initApp(){
+  $("todayText").textContent=new Date().toLocaleDateString("id-ID",{
+    weekday:"long",day:"numeric",month:"long",year:"numeric"
+  });
+  await recordVisit();
+  await loadPublicNews();
 
-loadPublicArticles();
-checkAdminSession();
+  const allowed=await checkAdmin();
+  if(allowed){
+    // Admin tetap membuka halaman berita sampai memilih dashboard.
+  }
+  db.auth.onAuthStateChange(async(event,session)=>{
+    if(!session){isAdmin=false;return}
+    setTimeout(async()=>{
+      if(await checkAdmin()){
+        // Sesi admin terverifikasi.
+      }
+    },0);
+  });
+}
+
+initApp();
 </script>
 </body>
 </html>
