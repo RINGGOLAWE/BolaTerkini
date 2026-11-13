@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,169 +6,699 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#081426">
 <meta name="description" content="BolaTerkini — berita sepak bola terbaru, terpercaya, dan aktual.">
-<title>BolaTerkini — Berita Sepak Bola</title>
+<title>BolaTerkini — Portal Sepak Bola Indonesia</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --navy:#081426;--navy2:#102440;--gold:#e5b94f;
-  --gold2:#f5d982;--paper:#f3f5f8;--white:#fff;
-  --muted:#778397;--line:#e4e8ef;--red:#d94848;
-  --shadow:0 12px 35px rgba(8,20,38,.09)
+--navy:#081426;
+--navy2:#102440;
+--gold:#e5b94f;
+--gold2:#f5d982;
+--paper:#f3f5f8;
+--white:#fff;
+--muted:#778397;
+--line:#e4e8ef;
+--red:#d94848;
+--shadow:0 12px 35px rgba(8,20,38,.09)
 }
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:#17243a;font-family:Arial,Helvetica,sans-serif}
+
+body{
+margin:0;
+background:var(--paper);
+color:#17243a;
+font-family:Inter,Arial,sans-serif;
+letter-spacing:-.15px
+}
+
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-.topline{height:4px;background:linear-gradient(90deg,var(--gold),#fff0b4,var(--gold))}
-header{background:var(--navy);color:white;position:sticky;top:0;z-index:20;box-shadow:0 5px 20px #07122255}
-.nav{max-width:1200px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand{display:flex;align-items:center;gap:11px;color:white;text-decoration:none}
-.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,var(--gold2),var(--gold));display:grid;place-items:center;color:var(--navy);font-weight:900;font-size:20px}
-.brand-name{font-size:21px;font-weight:900;letter-spacing:.4px}
+
+.topline{
+height:4px;
+background:linear-gradient(90deg,var(--gold),#fff0b4,var(--gold))
+}
+
+header{
+background:var(--navy);
+color:white;
+position:sticky;
+top:0;
+z-index:20;
+box-shadow:0 5px 20px #07122255;
+border-bottom:1px solid #ffffff15
+}
+
+.nav{
+max-width:1200px;
+margin:auto;
+min-height:76px;
+padding:12px 22px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:18px;
+flex-wrap:wrap
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:12px;
+color:white;
+text-decoration:none
+}
+
+.brand-mark{
+width:44px;
+height:44px;
+border-radius:50%;
+background:#172c48;
+border:1px solid var(--gold);
+display:grid;
+place-items:center;
+color:var(--gold);
+font-size:22px
+}
+
+.brand-text{display:flex;flex-direction:column;gap:2px}
+
+.brand-name{
+font-size:23px;
+font-weight:900;
+letter-spacing:-.7px
+}
+
 .brand-name span{color:var(--gold)}
-.nav-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.btn{border:0;border-radius:9px;padding:10px 15px;font-weight:700}
+
+.brand-text small{
+font-size:9px;
+letter-spacing:1.1px;
+color:#aebbd0;
+font-weight:700
+}
+
+.nav-actions{
+display:flex;
+gap:24px;
+align-items:center
+}
+
+.nav-link{
+color:#e9edf4;
+text-decoration:none;
+font-size:13px;
+font-weight:700;
+transition:.2s
+}
+
+.nav-link:hover,.nav-link.active{color:var(--gold)}
+
+.nav-link.active::after{
+content:"";
+display:block;
+height:2px;
+background:var(--gold);
+margin-top:7px
+}
+
+.mobile-menu-btn{
+display:none;
+background:transparent;
+border:1px solid #ffffff45;
+border-radius:8px;
+padding:8px
+}
+
+.mobile-menu-btn span{
+display:block;
+width:20px;
+height:2px;
+background:white;
+margin:4px 0
+}
+
+.btn{
+border:0;
+border-radius:8px;
+padding:10px 15px;
+font-weight:700
+}
+
 .btn-gold{background:var(--gold);color:var(--navy)}
 .btn-outline{background:transparent;border:1px solid #ffffff55;color:white}
 .btn-dark{background:var(--navy);color:white}
 .btn-light{background:#edf1f6;color:#23334b}
 .btn-danger{background:#fee8e8;color:#a52b2b}
-.hero{background:radial-gradient(circle at 85% 20%,#1d3c60 0,transparent 35%),linear-gradient(120deg,#081426,#102b4b);color:white;padding:58px 22px 48px}
-.hero-inner{max-width:1200px;margin:auto}
-.eyebrow{color:var(--gold);font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
-.hero h1{font-size:clamp(32px,5vw,56px);line-height:1.08;max-width:720px;margin:14px 0}
+
+.hero{
+position:relative;
+min-height:420px;
+padding:65px 22px;
+display:flex;
+align-items:center;
+overflow:hidden;
+background:
+linear-gradient(90deg,rgba(5,15,30,.96),rgba(5,15,30,.78) 52%,rgba(5,15,30,.28)),
+url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1800&q=85");
+background-size:cover;
+background-position:center
+}
+
+.hero-inner{
+width:100%;
+max-width:1200px;
+margin:auto;
+position:relative;
+z-index:2
+}
+
+.hero-content{max-width:650px}
+
+.eyebrow{
+color:var(--gold);
+font-size:11px;
+font-weight:900;
+letter-spacing:2px;
+text-transform:uppercase
+}
+
+.hero h1{
+font-size:clamp(34px,5vw,53px);
+line-height:1.15;
+letter-spacing:-1.4px;
+font-weight:800;
+margin:17px 0 13px
+}
+
 .hero h1 span{color:var(--gold)}
-.hero p{color:#c4d0df;max-width:620px;line-height:1.7}
-.hero-tag{display:inline-block;margin-top:15px;padding:8px 12px;border:1px solid #ffffff30;border-radius:30px;color:#e7edf6;font-size:12px}
-.ticker{background:#122947;color:white;border-bottom:1px solid #ffffff12}
-.ticker-inner{max-width:1200px;margin:auto;padding:12px 22px;display:flex;gap:12px;align-items:center;font-size:13px}
-.ticker-label{background:var(--gold);color:var(--navy);padding:5px 9px;border-radius:5px;font-weight:900;white-space:nowrap}
-main{max-width:1200px;margin:32px auto;padding:0 22px 60px}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
-.section-head h2{margin:0;color:var(--navy);font-size:24px}
-.section-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
-.tools{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap}
-.search{flex:1;min-width:210px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:white;outline:none}
-.search:focus,input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #e5b94f22;outline:none}
-.filter{padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:white;color:#26364d}
-.news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.news-card{background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 4px 15px #07122208;transition:.2s}
-.news-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-.news-image{height:190px;width:100%;object-fit:cover;background:#dce3eb}
+
+.hero-subtitle{
+color:var(--gold2);
+font-size:clamp(19px,3vw,25px);
+font-weight:700;
+margin-bottom:13px
+}
+
+.hero p{
+color:#d0d9e5;
+font-size:15px;
+line-height:1.8;
+max-width:570px;
+margin:0
+}
+
+.hero-button{
+display:inline-flex;
+align-items:center;
+gap:15px;
+margin-top:25px;
+padding:13px 19px;
+border:0;
+border-radius:6px;
+background:var(--gold);
+color:var(--navy);
+font-weight:800;
+font-size:13px
+}
+
+.hero-button:hover{background:var(--gold2)}
+
+.ticker{
+background:#122947;
+color:white;
+border-bottom:1px solid #ffffff12
+}
+
+.ticker-inner{
+max-width:1200px;
+margin:auto;
+padding:12px 22px;
+display:flex;
+gap:12px;
+align-items:center;
+font-size:13px
+}
+
+.ticker-label{
+background:var(--gold);
+color:var(--navy);
+padding:5px 9px;
+border-radius:5px;
+font-weight:900;
+white-space:nowrap
+}
+
+main{
+max-width:1200px;
+margin:32px auto;
+padding:0 22px 60px
+}
+
+.section-head{
+display:flex;
+justify-content:space-between;
+align-items:end;
+gap:15px;
+margin-bottom:18px
+}
+
+.section-head h2{
+margin:0;
+color:var(--navy);
+font-size:24px
+}
+
+.section-head p{
+margin:6px 0 0;
+color:var(--muted);
+font-size:13px
+}
+
+.tools{
+display:flex;
+gap:10px;
+margin:20px 0;
+flex-wrap:wrap
+}
+
+.search{
+flex:1;
+min-width:210px;
+padding:12px 14px;
+border:1px solid var(--line);
+border-radius:10px;
+background:white;
+outline:none
+}
+
+.filter{
+padding:11px 13px;
+border:1px solid var(--line);
+border-radius:10px;
+background:white;
+color:#26364d
+}
+
+.search:focus,input:focus,textarea:focus,select:focus{
+border-color:var(--gold);
+box-shadow:0 0 0 3px #e5b94f22;
+outline:none
+}
+
+.news-grid{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:20px
+}
+
+.news-card{
+background:white;
+border:1px solid var(--line);
+border-radius:13px;
+overflow:hidden;
+box-shadow:0 4px 15px #07122208;
+transition:.2s
+}
+
+.news-card:hover{
+transform:translateY(-3px);
+box-shadow:var(--shadow)
+}
+
+.news-image{
+height:190px;
+width:100%;
+object-fit:cover;
+background:#dce3eb
+}
+
 .news-body{padding:17px}
-.category{display:inline-block;background:#fff5d9;color:#795a12;border-radius:5px;padding:5px 8px;font-size:10px;font-weight:900;text-transform:uppercase}
-.news-card h3{font-size:18px;line-height:1.4;margin:12px 0 9px;color:var(--navy)}
-.news-card p{font-size:13px;line-height:1.6;color:#68768a;margin:0 0 15px}
-.news-meta{font-size:11px;color:#8994a4;display:flex;justify-content:space-between;gap:8px}
-.read-more{margin-top:15px;border:0;background:none;padding:0;color:#98701a;font-weight:800}
-.empty{grid-column:1/-1;background:white;padding:35px;border-radius:14px;text-align:center;color:var(--muted)}
-.footer{background:var(--navy);color:#b9c5d4;padding:30px 22px;text-align:center;font-size:12px}
+
+.category{
+display:inline-block;
+background:#fff5d9;
+color:#795a12;
+border-radius:5px;
+padding:5px 8px;
+font-size:10px;
+font-weight:900;
+text-transform:uppercase
+}
+
+.news-card h3{
+font-size:18px;
+line-height:1.45;
+margin:12px 0 9px;
+color:var(--navy)
+}
+
+.news-card p{
+font-size:13px;
+line-height:1.7;
+color:#68768a;
+margin:0 0 15px
+}
+
+.news-meta{
+font-size:11px;
+color:#8994a4;
+display:flex;
+justify-content:space-between;
+gap:8px;
+flex-wrap:wrap
+}
+
+.read-more{
+margin-top:15px;
+border:0;
+background:none;
+padding:0;
+color:#98701a;
+font-weight:800
+}
+
+.empty{
+grid-column:1/-1;
+background:white;
+padding:35px;
+border-radius:14px;
+text-align:center;
+color:var(--muted)
+}
+
+.footer{
+background:var(--navy);
+color:#b9c5d4;
+padding:30px 22px;
+text-align:center;
+font-size:12px
+}
+
 .footer strong{color:var(--gold)}
 .hidden{display:none!important}
-.modal-backdrop{position:fixed;inset:0;background:#06101edb;z-index:50;display:grid;place-items:center;padding:18px}
-.modal{background:white;width:min(540px,100%);max-height:90vh;overflow:auto;border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+
+.modal-backdrop{
+position:fixed;
+inset:0;
+background:#06101edb;
+z-index:50;
+display:grid;
+place-items:center;
+padding:18px
+}
+
+.modal{
+background:white;
+width:min(540px,100%);
+max-height:90vh;
+overflow:auto;
+border-radius:16px;
+padding:24px;
+box-shadow:var(--shadow)
+}
+
 .modal h2{margin:0 0 18px;color:var(--navy)}
+
 .field{display:grid;gap:7px;margin:13px 0}
-.field label{font-size:12px;font-weight:800;color:#46546a}
-.field input,.field textarea,.field select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:white}
+
+.field label{
+font-size:12px;
+font-weight:800;
+color:#46546a
+}
+
+.field input,.field textarea,.field select{
+width:100%;
+padding:11px 12px;
+border:1px solid var(--line);
+border-radius:8px;
+background:white
+}
+
 .field textarea{min-height:130px;resize:vertical}
-.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
-.admin-wrap{max-width:1200px;margin:28px auto;padding:0 22px 60px}
-.admin-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+
+.modal-actions{
+display:flex;
+gap:9px;
+justify-content:flex-end;
+margin-top:18px;
+flex-wrap:wrap
+}
+
+.admin-wrap{
+max-width:1200px;
+margin:28px auto;
+padding:0 22px 60px
+}
+
+.admin-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:22px
+}
+
 .admin-title h1{color:var(--navy);margin:0}
 .admin-title p{color:var(--muted);font-size:13px;margin:6px 0}
 .admin-actions{display:flex;gap:8px;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:22px}
-.stat{background:white;border:1px solid var(--line);border-radius:13px;padding:19px}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-bottom:22px
+}
+
+.stat{
+background:white;
+border:1px solid var(--line);
+border-radius:13px;
+padding:19px
+}
+
 .stat span{font-size:12px;color:var(--muted)}
 .stat strong{display:block;font-size:28px;color:var(--navy);margin-top:8px}
-.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 4px 15px #07122208}
+
+.panel{
+background:white;
+border:1px solid var(--line);
+border-radius:14px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 4px 15px #07122208
+}
+
 .panel h2{font-size:18px;margin:0 0 16px;color:var(--navy)}
+
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:middle}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:650px
+}
+
+th,td{
+text-align:left;
+padding:12px 10px;
+border-bottom:1px solid var(--line);
+font-size:12px;
+vertical-align:middle
+}
+
 th{color:#78869a;background:#f8f9fb}
 td strong{color:var(--navy)}
-.status{padding:5px 8px;border-radius:20px;font-size:10px;font-weight:800}
+
+.status{
+padding:5px 8px;
+border-radius:20px;
+font-size:10px;
+font-weight:800
+}
+
 .published{background:#e1f6e9;color:#217544}
 .draft{background:#fff1d6;color:#8a6415}
+
 .mini-actions{display:flex;gap:5px;flex-wrap:wrap}
-.mini-actions button{padding:6px 8px;border:0;border-radius:6px;font-size:11px;font-weight:700}
+.mini-actions button{
+padding:6px 8px;
+border:0;
+border-radius:6px;
+font-size:11px;
+font-weight:700
+}
+
 .notice{font-size:12px;color:#758196;line-height:1.6}
-.chart{display:flex;align-items:end;gap:10px;height:150px;padding:15px 5px 0;border-bottom:1px solid var(--line)}
-.bar-col{flex:1;min-width:0;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px}
-.bar{width:min(32px,75%);min-height:3px;background:linear-gradient(var(--gold2),#bd8e25);border-radius:5px 5px 0 0}
+
+.chart{
+display:flex;
+align-items:end;
+gap:10px;
+height:150px;
+padding:15px 5px 0;
+border-bottom:1px solid var(--line)
+}
+
+.bar-col{
+flex:1;
+min-width:0;
+text-align:center;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:end;
+align-items:center;
+gap:6px
+}
+
+.bar{
+width:min(32px,75%);
+min-height:3px;
+background:linear-gradient(var(--gold2),#bd8e25);
+border-radius:5px 5px 0 0
+}
+
 .bar-col small{font-size:9px;color:var(--muted)}
-@media(max-width:850px){.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){
- .nav{padding:12px 15px}.brand-name{font-size:18px}.brand-mark{width:36px;height:36px}
- .hero{padding:42px 18px}.news-grid{grid-template-columns:1fr}
- main,.admin-wrap{padding-left:15px;padding-right:15px}
- .stats{grid-template-columns:1fr}
- .section-head{align-items:start;flex-direction:column}
- .news-image{height:205px}
+
+@media(max-width:850px){
+.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:700px){
+.nav{padding:10px 15px;min-height:65px}
+.brand-mark{width:37px;height:37px;font-size:19px}
+.brand-name{font-size:19px}
+.brand-text small{font-size:8px}
+
+.mobile-menu-btn{display:block;margin-left:auto}
+
+.nav-actions{
+display:none;
+width:100%;
+flex-direction:column;
+align-items:stretch;
+gap:0;
+padding:8px 0 5px;
+border-top:1px solid #ffffff20
+}
+
+.nav-actions.open{display:flex}
+
+.nav-link{
+padding:13px 5px;
+border-bottom:1px solid #ffffff15
+}
+
+.nav-link.active::after{display:none}
+.nav-actions .btn{margin-top:9px}
+
+.hero{min-height:360px;padding:48px 19px}
+.hero h1{font-size:34px;letter-spacing:-.8px}
+.hero-subtitle{font-size:20px}
+.hero p{font-size:14px}
+
+.news-grid{grid-template-columns:1fr}
+main,.admin-wrap{padding-left:15px;padding-right:15px}
+.stats{grid-template-columns:1fr}
+.section-head{align-items:start;flex-direction:column}
+.news-image{height:205px}
 }
 </style>
 </head>
+
 <body>
 <div class="topline"></div>
+
 <header>
 <nav class="nav">
 <a class="brand" href="#" onclick="showHome();return false">
-<div class="brand-mark">B</div>
+<div class="brand-mark">⚽</div>
+<div class="brand-text">
 <div class="brand-name">BOLA<span>TERKINI</span></div>
-</a>
-<div class="nav-actions" id="navActions">
-<button class="btn btn-outline" onclick="openLogin()">Login Admin</button>
+<small>PORTAL SEPAK BOLA INDONESIA</small>
 </div>
+</a>
+
+<button class="mobile-menu-btn" onclick="toggleNav()" aria-label="Buka menu">
+<span></span><span></span><span></span>
+</button>
+
+<div class="nav-actions" id="navActions"></div>
 </nav>
 </header>
 
 <section id="publicPage">
+
 <section class="hero">
 <div class="hero-inner">
-<div class="eyebrow">Portal Sepak Bola Indonesia</div>
-<h1>Berita Sepak Bola <span>Terkini.</span><br>Lebih Dekat, Lebih Aktual.</h1>
-<p>Ikuti kabar terbaru dari lapangan hijau, mulai dari kompetisi lokal hingga panggung sepak bola dunia.</p>
-<div class="hero-tag">INFORMASI • ANALISIS • SEPAK BOLA</div>
+<div class="hero-content">
+<div class="eyebrow">PORTAL SEPAK BOLA INDONESIA</div>
+<h1>Berita Sepak Bola <span>Terkini.</span></h1>
+<div class="hero-subtitle">Lebih Dekat, Lebih Aktual.</div>
+<p>Menghadirkan informasi sepak bola nasional dan internasional, perkembangan kompetisi, serta kabar transfer pemain dari berbagai penjuru dunia.</p>
+<button class="hero-button" onclick="document.getElementById('newsSection').scrollIntoView({behavior:'smooth'})">
+Jelajahi Berita <span>→</span>
+</button>
+</div>
 </div>
 </section>
+
 <div class="ticker">
 <div class="ticker-inner">
 <span class="ticker-label">TERKINI</span>
-<span id="tickerText">Selamat datang di BolaTerkini — sumber informasi sepak bola pilihanmu.</span>
+<span id="tickerText">Selamat datang di BolaTerkini — portal informasi sepak bola Indonesia.</span>
 </div>
 </div>
-<main>
+
+<main id="newsSection">
 <div class="section-head">
 <div>
-<div class="eyebrow">Update terbaru</div>
+<div class="eyebrow">UPDATE TERBARU</div>
 <h2>Berita Sepak Bola</h2>
-<p>Temukan kabar terbaru dari dunia sepak bola.</p>
+<p>Informasi terbaru dari dunia sepak bola nasional dan internasional.</p>
 </div>
 </div>
+
 <div class="tools">
 <input id="searchInput" class="search" type="search" placeholder="Cari berita atau klub..." oninput="renderArticles()">
 <select id="categoryFilter" class="filter" onchange="renderArticles()">
 <option value="">Semua Kategori</option>
-<option>Nasional</option><option>Internasional</option>
-<option>Transfer</option><option>Liga Inggris</option>
-<option>La Liga</option><option>Serie A</option>
-<option>Champions League</option><option>Lainnya</option>
+<option>Nasional</option>
+<option>Internasional</option>
+<option>Transfer</option>
+<option>Liga Inggris</option>
+<option>La Liga</option>
+<option>Serie A</option>
+<option>Champions League</option>
+<option>Lainnya</option>
 </select>
 </div>
+
 <div id="newsGrid" class="news-grid">
 <div class="empty">Memuat berita...</div>
 </div>
 </main>
-<footer class="footer">© <span id="year"></span> <strong>BolaTerkini</strong>. Informasi sepak bola untuk semua.</footer>
+
+<footer class="footer">
+© <span id="year"></span> <strong>BolaTerkini</strong>. Informasi sepak bola untuk semua.
+</footer>
 </section>
 
 <section id="adminPage" class="hidden">
 <div class="admin-wrap">
 <div class="admin-title">
 <div>
-<div class="eyebrow">Panel pengelola</div>
+<div class="eyebrow">PANEL PENGELOLA</div>
 <h1>Dashboard Admin</h1>
 <p>Kelola berita dan pantau aktivitas pengunjung BolaTerkini.</p>
 </div>
@@ -176,32 +707,67 @@ td strong{color:var(--navy)}
 <button class="btn btn-danger" onclick="logoutAdmin()">Keluar</button>
 </div>
 </div>
+
 <div class="stats">
 <div class="stat"><span>Total Artikel</span><strong id="statArticles">0</strong></div>
 <div class="stat"><span>Artikel Terbit</span><strong id="statPublished">0</strong></div>
 <div class="stat"><span>Jumlah Kunjungan Tercatat</span><strong id="statViews">0</strong></div>
 </div>
+
 <div class="panel">
 <h2>Statistik Kunjungan</h2>
 <div id="viewsChart" class="chart"></div>
 <p class="notice">Grafik berdasarkan data yang tersedia di tabel <code>page_views</code>.</p>
 </div>
+
 <div class="panel">
 <h2 id="editorTitle">Tambah Artikel</h2>
 <form id="articleForm" onsubmit="saveArticle(event)">
 <input type="hidden" id="articleId">
-<div class="field"><label for="articleTitle">Judul Artikel</label><input id="articleTitle" required maxlength="180"></div>
-<div class="field"><label for="articleCategory">Kategori</label>
+
+<div class="field">
+<label for="articleTitle">Judul Artikel</label>
+<input id="articleTitle" required maxlength="180">
+</div>
+
+<div class="field">
+<label for="articleCategory">Kategori</label>
 <select id="articleCategory">
-<option>Nasional</option><option>Internasional</option><option>Transfer</option>
-<option>Liga Inggris</option><option>La Liga</option><option>Serie A</option>
-<option>Champions League</option><option>Lainnya</option>
-</select></div>
-<div class="field"><label for="articleImage">URL Gambar</label><input id="articleImage" type="url" placeholder="https://..."></div>
-<div class="field"><label for="articleSource">Nama Sumber</label><input id="articleSource" maxlength="100" placeholder="Contoh: BolaTerkini"></div>
-<div class="field"><label for="articleSourceUrl">URL Sumber</label><input id="articleSourceUrl" type="url" placeholder="https://..."></div>
-<div class="field"><label for="articleContent">Isi Artikel</label><textarea id="articleContent" required></textarea></div>
-<div class="field"><label><input id="articleBreaking" type="checkbox" style="width:auto"> Tandai sebagai berita utama / breaking news</label></div>
+<option>Nasional</option>
+<option>Internasional</option>
+<option>Transfer</option>
+<option>Liga Inggris</option>
+<option>La Liga</option>
+<option>Serie A</option>
+<option>Champions League</option>
+<option>Lainnya</option>
+</select>
+</div>
+
+<div class="field">
+<label for="articleImage">URL Gambar</label>
+<input id="articleImage" type="url" placeholder="https://...">
+</div>
+
+<div class="field">
+<label for="articleSource">Nama Sumber</label>
+<input id="articleSource" maxlength="100" placeholder="Nama media sumber">
+</div>
+
+<div class="field">
+<label for="articleSourceUrl">URL Sumber</label>
+<input id="articleSourceUrl" type="url" placeholder="https://...">
+</div>
+
+<div class="field">
+<label for="articleContent">Isi Artikel</label>
+<textarea id="articleContent" required></textarea>
+</div>
+
+<div class="field">
+<label><input id="articleBreaking" type="checkbox" style="width:auto"> Tandai sebagai berita utama / breaking news</label>
+</div>
+
 <div class="modal-actions">
 <button type="button" class="btn btn-light" onclick="resetArticleForm()">Bersihkan</button>
 <button type="submit" class="btn btn-gold">Simpan sebagai Draft</button>
@@ -209,21 +775,33 @@ td strong{color:var(--navy)}
 </div>
 </form>
 </div>
+
 <div class="panel">
 <div class="section-head">
-<div><h2>Kelola Artikel</h2><p>Periksa draft sebelum menerbitkannya.</p></div>
+<div>
+<h2>Kelola Artikel</h2>
+<p>Periksa draft sebelum menerbitkannya.</p>
+</div>
 <button class="btn btn-light" onclick="loadAdminData()">Muat Ulang</button>
 </div>
+
 <div class="table-wrap">
 <table>
-<thead><tr><th>Judul</th><th>Kategori</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead>
-<tbody id="adminArticles"><tr><td colspan="5">Memuat artikel...</td></tr></tbody>
+<thead>
+<tr>
+<th>Judul</th><th>Kategori</th><th>Status</th><th>Tanggal</th><th>Aksi</th>
+</tr>
+</thead>
+<tbody id="adminArticles">
+<tr><td colspan="5">Memuat artikel...</td></tr>
+</tbody>
 </table>
 </div>
 </div>
+
 <div class="panel">
 <h2>Ambil Berita Otomatis</h2>
-<p class="notice">Fitur ini memanggil Supabase Edge Function <code>rapid-worker</code>. Artikel yang berhasil diambil akan dimasukkan sebagai draft agar dapat diperiksa admin sebelum diterbitkan.</p>
+<p class="notice">Fitur ini memanggil Supabase Edge Function <code>rapid-worker</code>. Artikel yang berhasil diambil akan dimasukkan sebagai draft untuk diperiksa admin.</p>
 <button class="btn btn-gold" onclick="fetchAutomaticNews()">Ambil Berita Sekarang</button>
 <p id="fetchStatus" class="notice"></p>
 </div>
@@ -234,8 +812,14 @@ td strong{color:var(--navy)}
 <div class="modal">
 <h2>Login Admin</h2>
 <form onsubmit="loginAdmin(event)">
-<div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required autocomplete="username"></div>
-<div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+<div class="field">
+<label for="loginEmail">Email</label>
+<input id="loginEmail" type="email" required autocomplete="username">
+</div>
+<div class="field">
+<label for="loginPassword">Password</label>
+<input id="loginPassword" type="password" required autocomplete="current-password">
+</div>
 <p id="loginError" class="notice"></p>
 <div class="modal-actions">
 <button type="button" class="btn btn-light" onclick="closeLogin()">Batal</button>
@@ -254,11 +838,11 @@ td strong{color:var(--navy)}
 </div>
 </article>
 </div>
+
 <script>
 const SUPABASE_URL = "https://hbpwpesycrpfiqsdaqbn.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_XzFAqQu5HwREY--EBtIA4g_MhRsyFrf";
 
-// Konfigurasi penyimpanan sesi agar login tetap tersimpan.
 const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
@@ -302,14 +886,32 @@ function formatDate(value) {
   });
 }
 
-function updateHeader() {
-  $("navActions").innerHTML = isAdmin
-    ? `<button class="btn btn-outline" onclick="showHome()">Beranda</button>
-       <button class="btn btn-gold" onclick="showAdmin()">Dashboard</button>`
-    : `<button class="btn btn-outline" onclick="openLogin()">Login Admin</button>`;
+function toggleNav() {
+  $("navActions").classList.toggle("open");
 }
 
-// Pemeriksaan sesi dan hak akses admin.
+function closeNav() {
+  $("navActions").classList.remove("open");
+}
+
+function updateHeader() {
+  $("navActions").innerHTML = `
+    <a class="nav-link active" href="#"
+      onclick="showHome();closeNav();return false">BERANDA</a>
+
+    <a class="nav-link" href="#newsSection"
+      onclick="closeNav()">BERITA</a>
+
+    <a class="nav-link" href="#newsSection"
+      onclick="closeNav()">LIGA</a>
+
+    ${isAdmin
+      ? `<button class="btn btn-gold" onclick="closeNav();showAdmin()">Dashboard</button>`
+      : `<button class="btn btn-outline" onclick="closeNav();openLogin()">Login Admin</button>`
+    }
+  `;
+}
+
 async function checkAdmin() {
   if (adminCheckPromise) return adminCheckPromise;
 
@@ -323,22 +925,20 @@ async function checkAdmin() {
         return false;
       }
 
-      // Status admin yang sudah diverifikasi tetap digunakan
-      // selama sesi masih aktif.
       if (isAdmin) {
         updateHeader();
         return true;
       }
 
-      const { data: allowed, error: adminError } =
+      const { data:allowed, error:adminError } =
         await db.rpc("is_bolaterkini_admin");
 
       isAdmin = !adminError && allowed === true;
       updateHeader();
-
       return isAdmin;
+
     } catch (error) {
-      console.error("Pemeriksaan admin gagal:", error);
+      console.error("Pemeriksaan admin gagal:",error);
       isAdmin = false;
       updateHeader();
       return false;
@@ -350,20 +950,19 @@ async function checkAdmin() {
   return adminCheckPromise;
 }
 
-// Berpindah ke Beranda tanpa logout.
 async function showHome() {
+  closeNav();
   $("adminPage").classList.add("hidden");
   $("publicPage").classList.remove("hidden");
 
   updateHeader();
   await loadPublicArticles();
 
-  window.scrollTo({ top:0, behavior:"smooth" });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// Berpindah ke Dashboard tanpa meminta login ulang.
 async function showAdmin() {
-  const { data, error } = await db.auth.getSession();
+  const {data,error} = await db.auth.getSession();
 
   if (error || !data.session) {
     isAdmin = false;
@@ -386,7 +985,7 @@ async function showAdmin() {
   updateHeader();
   await loadAdminData();
 
-  window.scrollTo({ top:0, behavior:"smooth" });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function openLogin() {
@@ -398,7 +997,6 @@ function closeLogin() {
   $("loginModal").classList.add("hidden");
 }
 
-// Login admin.
 async function loginAdmin(event) {
   event.preventDefault();
 
@@ -407,10 +1005,7 @@ async function loginAdmin(event) {
   const email = $("loginEmail").value.trim();
   const password = $("loginPassword").value;
 
-  const { error } = await db.auth.signInWithPassword({
-    email,
-    password
-  });
+  const {error} = await db.auth.signInWithPassword({email,password});
 
   if (error) {
     $("loginError").textContent = error.message;
@@ -418,7 +1013,6 @@ async function loginAdmin(event) {
   }
 
   isAdmin = false;
-
   const allowed = await checkAdmin();
 
   if (!allowed) {
@@ -430,13 +1024,11 @@ async function loginAdmin(event) {
 
   closeLogin();
   $("loginPassword").value = "";
-
   await showAdmin();
 }
 
-// Logout hanya terjadi ketika tombol Keluar ditekan.
 async function logoutAdmin() {
-  const { error } = await db.auth.signOut();
+  const {error} = await db.auth.signOut();
 
   if (error) {
     alert("Gagal keluar: " + error.message);
@@ -445,23 +1037,21 @@ async function logoutAdmin() {
 
   isAdmin = false;
   updateHeader();
-
   showHome();
 }
 
-// Memuat artikel publik.
 async function loadPublicArticles() {
   $("newsGrid").innerHTML =
     `<div class="empty">Memuat berita...</div>`;
 
-  const { data, error } = await db.from("articles")
+  const {data,error} = await db.from("articles")
     .select("*")
-    .eq("is_published", true)
-    .order("created_at", { ascending:false });
+    .eq("is_published",true)
+    .order("created_at",{ascending:false});
 
   if (error) {
     $("newsGrid").innerHTML =
-      `<div class="empty">Berita belum dapat dimuat. Periksa koneksi dan kebijakan akses database.</div>`;
+      `<div class="empty">Berita belum dapat dimuat. Periksa koneksi dan akses database.</div>`;
     return;
   }
 
@@ -475,16 +1065,14 @@ async function loadPublicArticles() {
     : "Ikuti kabar terbaru dari dunia sepak bola bersama BolaTerkini.";
 }
 
-// Menampilkan dan mencari artikel.
 function renderArticles() {
   const query = $("searchInput").value.trim().toLowerCase();
   const category = $("categoryFilter").value;
 
   const filtered = articles.filter(a =>
     (!category || a.category === category) &&
-    (!query ||
-      `${a.title} ${a.content} ${a.category}`
-        .toLowerCase().includes(query))
+    (!query || `${a.title} ${a.content} ${a.category}`
+      .toLowerCase().includes(query))
   );
 
   if (!filtered.length) {
@@ -503,8 +1091,8 @@ function renderArticles() {
       <article class="news-card">
         ${image
           ? `<img class="news-image" src="${escapeHTML(image)}"
-               alt="${escapeHTML(a.title)}" loading="lazy"
-               onerror="this.style.display='none'">`
+              alt="${escapeHTML(a.title)}" loading="lazy"
+              onerror="this.style.display='none'">`
           : `<div class="news-image" style="display:grid;place-items:center;color:#7d8ba0">BolaTerkini</div>`
         }
         <div class="news-body">
@@ -515,7 +1103,7 @@ function renderArticles() {
           <h3>${escapeHTML(a.title)}</h3>
           <p>${escapeHTML(excerpt)}${excerpt.length >= 145 ? "..." : ""}</p>
           <div class="news-meta">
-            <span>${escapeHTML(a.source_name || "BolaTerkini")}</span>
+            <span>BolaTerkini · Sumber: ${escapeHTML(a.source_name || "Tidak dicantumkan")}</span>
             <span>${formatDate(a.created_at)}</span>
           </div>
           <button class="read-more"
@@ -527,7 +1115,6 @@ function renderArticles() {
   }).join("");
 }
 
-// Membuka detail artikel.
 async function openArticle(id) {
   const a = articles.find(item => String(item.id) === String(id));
   if (!a) return;
@@ -543,8 +1130,8 @@ async function openArticle(id) {
       ${escapeHTML(a.title)}
     </h2>
     <p class="notice">
-      ${formatDate(a.created_at)} ·
-      ${escapeHTML(a.source_name || "BolaTerkini")}
+      ${formatDate(a.created_at)} · BolaTerkini ·
+      Sumber: ${escapeHTML(a.source_name || "Tidak dicantumkan")}
     </p>
     ${image
       ? `<img src="${escapeHTML(image)}" alt=""
@@ -555,17 +1142,19 @@ async function openArticle(id) {
     </div>
     ${source
       ? `<p class="notice" style="margin-top:18px">
-          Sumber: <a href="${escapeHTML(source)}" target="_blank"
-          rel="noopener noreferrer">Baca sumber asli</a>
+          Sumber:
+          <a href="${escapeHTML(source)}" target="_blank" rel="noopener noreferrer">
+            ${escapeHTML(a.source_name || "Baca sumber asli")}
+          </a>
         </p>`
       : ""}
   `;
 
   $("articleModal").classList.remove("hidden");
 
-  db.from("page_views").insert({ article_id:a.id })
+  db.from("page_views").insert({article_id:a.id})
     .then(({error}) => {
-      if (error) console.warn("Pencatatan kunjungan artikel gagal:", error.message);
+      if (error) console.warn("Pencatatan kunjungan gagal:",error.message);
     });
 }
 
@@ -593,20 +1182,19 @@ async function shareArticle() {
       await navigator.clipboard.writeText(url);
       alert("Tautan artikel berhasil disalin.");
     }
-  } catch (e) {
+  } catch(e) {
     if (e.name !== "AbortError") {
       alert("Tautan belum dapat dibagikan.");
     }
   }
 }
 
-// Memuat data dashboard.
 async function loadAdminData() {
   if (!await checkAdmin()) return;
 
-  const { data, error } = await db.from("articles")
+  const {data,error} = await db.from("articles")
     .select("*")
-    .order("created_at", { ascending:false });
+    .order("created_at",{ascending:false});
 
   if (error) {
     alert("Gagal memuat artikel: " + error.message);
@@ -623,7 +1211,6 @@ async function loadAdminData() {
   await loadAnalytics();
 }
 
-// Tabel artikel admin.
 function renderAdminArticles() {
   if (!adminArticlesCache.length) {
     $("adminArticles").innerHTML =
@@ -643,21 +1230,17 @@ function renderAdminArticles() {
       <td>${formatDate(a.created_at)}</td>
       <td>
         <div class="mini-actions">
-          <button class="btn-light"
-            onclick="editArticle('${String(a.id).replace(/'/g,"")}')">Edit</button>
-          <button class="btn-gold"
-            onclick="togglePublish('${String(a.id).replace(/'/g,"")}',${!a.is_published})">
+          <button class="btn-light" onclick="editArticle('${String(a.id).replace(/'/g,"")}')">Edit</button>
+          <button class="btn-gold" onclick="togglePublish('${String(a.id).replace(/'/g,"")}',${!a.is_published})">
             ${a.is_published ? "Jadikan Draft" : "Terbitkan"}
           </button>
-          <button class="btn-danger"
-            onclick="deleteArticle('${String(a.id).replace(/'/g,"")}')">Hapus</button>
+          <button class="btn-danger" onclick="deleteArticle('${String(a.id).replace(/'/g,"")}')">Hapus</button>
         </div>
       </td>
     </tr>
   `).join("");
 }
 
-// Form artikel.
 function resetArticleForm() {
   $("articleForm").reset();
   $("articleId").value = "";
@@ -678,7 +1261,7 @@ function editArticle(id) {
   $("articleBreaking").checked = !!a.is_breaking;
   $("editorTitle").textContent = "Edit Artikel";
 
-  $("articleForm").scrollIntoView({ behavior:"smooth" });
+  $("articleForm").scrollIntoView({behavior:"smooth"});
 }
 
 function getArticleFormData(published) {
@@ -717,12 +1300,12 @@ async function persistArticle(published) {
   }
 
   if (payload.image_url && !safeUrl(payload.image_url)) {
-    alert("URL gambar harus menggunakan alamat http atau https yang valid.");
+    alert("URL gambar harus menggunakan http atau https.");
     return;
   }
 
   if (payload.source_url && !safeUrl(payload.source_url)) {
-    alert("URL sumber harus menggunakan alamat http atau https yang valid.");
+    alert("URL sumber harus menggunakan http atau https.");
     return;
   }
 
@@ -749,12 +1332,11 @@ async function persistArticle(published) {
   await loadPublicArticles();
 }
 
-// Terbitkan atau jadikan draft.
 async function togglePublish(id,published) {
   if (!await checkAdmin()) return;
 
-  const { error } = await db.from("articles")
-    .update({ is_published:published })
+  const {error} = await db.from("articles")
+    .update({is_published:published})
     .eq("id",id);
 
   if (error) {
@@ -766,12 +1348,11 @@ async function togglePublish(id,published) {
   await loadPublicArticles();
 }
 
-// Hapus artikel.
 async function deleteArticle(id) {
   if (!await checkAdmin()) return;
   if (!confirm("Yakin ingin menghapus artikel ini?")) return;
 
-  const { error } = await db.from("articles")
+  const {error} = await db.from("articles")
     .delete()
     .eq("id",id);
 
@@ -784,9 +1365,8 @@ async function deleteArticle(id) {
   await loadPublicArticles();
 }
 
-// Statistik kunjungan.
 async function loadAnalytics() {
-  const { data, error } = await db.from("page_views")
+  const {data,error} = await db.from("page_views")
     .select("id,visited_at")
     .order("visited_at",{ascending:false})
     .limit(10000);
@@ -835,14 +1415,13 @@ async function loadAnalytics() {
   `).join("");
 }
 
-// Mengambil berita otomatis sebagai draft.
 async function fetchAutomaticNews() {
   if (!await checkAdmin()) return;
 
   $("fetchStatus").textContent = "Sedang mengambil berita...";
 
-  const { data, error } = await db.functions.invoke("rapid-worker", {
-    body:{ action:"fetch_news" }
+  const {data,error} = await db.functions.invoke("rapid-worker",{
+    body:{action:"fetch_news"}
   });
 
   if (error) {
@@ -879,7 +1458,7 @@ async function fetchAutomaticNews() {
     return;
   }
 
-  const { error:insertError } =
+  const {error:insertError} =
     await db.from("articles").insert(drafts);
 
   if (insertError) {
@@ -894,18 +1473,15 @@ async function fetchAutomaticNews() {
   await loadAdminData();
 }
 
-// Catat kunjungan halaman.
 async function recordPageView() {
-  const { error } = await db.from("page_views").insert({});
+  const {error} = await db.from("page_views").insert({});
 
   if (error) {
     console.warn("Kunjungan halaman tidak tercatat:",error.message);
   }
 }
 
-// Perubahan status autentikasi.
-// Tidak melakukan signOut saat berpindah halaman.
-db.auth.onAuthStateChange((event, session) => {
+db.auth.onAuthStateChange((event,session) => {
   setTimeout(async () => {
     if (event === "SIGNED_OUT" || !session) {
       isAdmin = false;
@@ -923,10 +1499,10 @@ db.auth.onAuthStateChange((event, session) => {
   },0);
 });
 
-// Inisialisasi website.
 async function initApp() {
   $("year").textContent = new Date().getFullYear();
 
+  updateHeader();
   await checkAdmin();
   await loadPublicArticles();
   await recordPageView();
