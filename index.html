@@ -15,16 +15,24 @@
 
 <style>
 :root{
---navy:#081426;--navy2:#102440;--gold:#e5b94f;--gold2:#f5d982;
---paper:#f3f5f8;--white:#fff;--muted:#778397;--line:#e4e8ef;
---red:#d94848;--shadow:0 12px 35px rgba(8,20,38,.09)
+--navy:#081426;
+--navy2:#102440;
+--gold:#e5b94f;
+--gold2:#f5d982;
+--paper:#f3f5f8;
+--white:#fff;
+--muted:#778397;
+--line:#e4e8ef;
+--red:#d94848;
+--shadow:0 12px 35px rgba(8,20,38,.09)
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:#17243a;font-family:Inter,Arial,sans-serif;letter-spacing:-.15px}
+body{margin:0;background:var(--paper);color:#17243a;font-family:Inter,Arial,sans-serif}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
 .topline{height:4px;background:linear-gradient(90deg,var(--gold),#fff0b4,var(--gold))}
-header{background:var(--navy);color:white;position:sticky;top:0;z-index:20;box-shadow:0 5px 20px #07122255;border-bottom:1px solid #ffffff15}
+header{background:var(--navy);color:white;position:sticky;top:0;z-index:20;box-shadow:0 5px 20px #07122255}
 .nav{max-width:1200px;margin:auto;min-height:76px;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px;color:white;text-decoration:none}
 .brand-mark{width:44px;height:44px;border-radius:50%;background:#172c48;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold);font-size:22px}
@@ -33,9 +41,8 @@ header{background:var(--navy);color:white;position:sticky;top:0;z-index:20;box-s
 .brand-name span{color:var(--gold)}
 .brand-text small{font-size:9px;letter-spacing:1.1px;color:#aebbd0;font-weight:700}
 .nav-actions{display:flex;gap:24px;align-items:center}
-.nav-link{color:#e9edf4;text-decoration:none;font-size:13px;font-weight:700;transition:.2s}
+.nav-link{color:#e9edf4;text-decoration:none;font-size:13px;font-weight:700}
 .nav-link:hover,.nav-link.active{color:var(--gold)}
-.nav-link.active::after{content:"";display:block;height:2px;background:var(--gold);margin-top:7px}
 .mobile-menu-btn{display:none;background:transparent;border:1px solid #ffffff45;border-radius:8px;padding:8px}
 .mobile-menu-btn span{display:block;width:20px;height:2px;background:white;margin:4px 0}
 .btn{border:0;border-radius:8px;padding:10px 15px;font-weight:700}
@@ -45,25 +52,24 @@ header{background:var(--navy);color:white;position:sticky;top:0;z-index:20;box-s
 .btn-light{background:#edf1f6;color:#23334b}
 .btn-danger{background:#fee8e8;color:#a52b2b}
 .hero{position:relative;min-height:420px;padding:65px 22px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(90deg,rgba(5,15,30,.96),rgba(5,15,30,.78) 52%,rgba(5,15,30,.28)),url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1800&q=85");background-size:cover;background-position:center}
-.hero-inner{width:100%;max-width:1200px;margin:auto;position:relative;z-index:2}
+.hero-inner{width:100%;max-width:1200px;margin:auto}
 .hero-content{max-width:650px}
 .eyebrow{color:var(--gold);font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
-.hero h1{font-size:clamp(34px,5vw,53px);line-height:1.15;letter-spacing:-1.4px;font-weight:800;margin:17px 0 13px}
+.hero h1{font-size:clamp(34px,5vw,53px);line-height:1.15;letter-spacing:-1.4px;font-weight:800;margin:17px 0 13px;color:white}
 .hero h1 span{color:var(--gold)}
 .hero-subtitle{color:var(--gold2);font-size:clamp(19px,3vw,25px);font-weight:700;margin-bottom:13px}
 .hero p{color:#d0d9e5;font-size:15px;line-height:1.8;max-width:570px;margin:0}
-.hero-button{display:inline-flex;align-items:center;gap:15px;margin-top:25px;padding:13px 19px;border:0;border-radius:6px;background:var(--gold);color:var(--navy);font-weight:800;font-size:13px}
-.hero-button:hover{background:var(--gold2)}
-.ticker{background:#122947;color:white;border-bottom:1px solid #ffffff12}
+.hero-button{display:inline-flex;gap:15px;margin-top:25px;padding:13px 19px;border:0;border-radius:6px;background:var(--gold);color:var(--navy);font-weight:800}
+.ticker{background:#122947;color:white}
 .ticker-inner{max-width:1200px;margin:auto;padding:12px 22px;display:flex;gap:12px;align-items:center;font-size:13px}
-.ticker-label{background:var(--gold);color:var(--navy);padding:5px 9px;border-radius:5px;font-weight:900;white-space:nowrap}
+.ticker-label{background:var(--gold);color:var(--navy);padding:5px 9px;border-radius:5px;font-weight:900}
 main{max-width:1200px;margin:32px auto;padding:0 22px 60px}
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
 .section-head h2{margin:0;color:var(--navy);font-size:24px}
 .section-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
 .tools{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap}
 .search{flex:1;min-width:210px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:white;outline:none}
-.filter{padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:white;color:#26364d}
+.filter{padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:white}
 .search:focus,input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #e5b94f22;outline:none}
 .news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .news-card{background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:0 4px 15px #07122208;transition:.2s}
@@ -118,19 +124,15 @@ td strong{color:var(--navy)}
 .nav{padding:10px 15px;min-height:65px}
 .brand-mark{width:37px;height:37px;font-size:19px}
 .brand-name{font-size:19px}
-.brand-text small{font-size:8px}
 .mobile-menu-btn{display:block;margin-left:auto}
-.nav-actions{display:none;width:100%;flex-direction:column;align-items:stretch;gap:0;padding:8px 0 5px;border-top:1px solid #ffffff20}
+.nav-actions{display:none;width:100%;flex-direction:column;align-items:stretch;gap:0;padding:8px 0}
 .nav-actions.open{display:flex}
 .nav-link{padding:13px 5px;border-bottom:1px solid #ffffff15}
-.nav-link.active::after{display:none}
 .nav-actions .btn{margin-top:9px}
 .hero{min-height:360px;padding:48px 19px}
-.hero h1{font-size:34px;letter-spacing:-.8px}
-.hero-subtitle{font-size:20px}
-.hero p{font-size:14px}
-.news-grid{grid-template-columns:1fr}
+.hero h1{font-size:34px}
 main,.admin-wrap{padding-left:15px;padding-right:15px}
+.news-grid{grid-template-columns:1fr}
 .stats{grid-template-columns:1fr}
 .section-head{align-items:start;flex-direction:column}
 .news-image{height:205px}
@@ -165,7 +167,7 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 <h1>Berita Sepak Bola <span>Terkini.</span></h1>
 <div class="hero-subtitle">Lebih Dekat, Lebih Aktual.</div>
 <p>Menghadirkan informasi sepak bola nasional dan internasional, perkembangan kompetisi, serta kabar transfer pemain dari berbagai penjuru dunia.</p>
-<button class="hero-button" onclick="document.getElementById('newsSection').scrollIntoView({behavior:'smooth'})">Jelajahi Berita <span>→</span></button>
+<button class="hero-button" onclick="document.getElementById('newsSection').scrollIntoView({behavior:'smooth'})">Jelajahi Berita →</button>
 </div>
 </div>
 </section>
@@ -173,7 +175,7 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 <div class="ticker">
 <div class="ticker-inner">
 <span class="ticker-label">TERKINI</span>
-<span id="tickerText">Selamat datang di BolaTerkini — portal informasi sepak bola Indonesia.</span>
+<span id="tickerText">Selamat datang di BolaTerkini.</span>
 </div>
 </div>
 
@@ -185,16 +187,25 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 <p>Informasi terbaru dari dunia sepak bola nasional dan internasional.</p>
 </div>
 </div>
+
 <div class="tools">
 <input id="searchInput" class="search" type="search" placeholder="Cari berita atau klub..." oninput="renderArticles()">
 <select id="categoryFilter" class="filter" onchange="renderArticles()">
 <option value="">Semua Kategori</option>
-<option>Nasional</option><option>Internasional</option><option>Transfer</option>
-<option>Liga Inggris</option><option>La Liga</option><option>Serie A</option>
-<option>Champions League</option><option>Lainnya</option>
+<option>Nasional</option>
+<option>Internasional</option>
+<option>Transfer</option>
+<option>Liga Inggris</option>
+<option>La Liga</option>
+<option>Serie A</option>
+<option>Champions League</option>
+<option>Lainnya</option>
 </select>
 </div>
-<div id="newsGrid" class="news-grid"><div class="empty">Memuat berita...</div></div>
+
+<div id="newsGrid" class="news-grid">
+<div class="empty">Memuat berita...</div>
+</div>
 </main>
 
 <footer class="footer">
@@ -204,6 +215,7 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 
 <section id="adminPage" class="hidden">
 <div class="admin-wrap">
+
 <div class="admin-title">
 <div>
 <div class="eyebrow">PANEL PENGELOLA</div>
@@ -219,7 +231,7 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 <div class="stats">
 <div class="stat"><span>Total Artikel</span><strong id="statArticles">0</strong></div>
 <div class="stat"><span>Artikel Terbit</span><strong id="statPublished">0</strong></div>
-<div class="stat"><span>Jumlah Kunjungan Tercatat</span><strong id="statViews">0</strong></div>
+<div class="stat"><span>Jumlah Kunjungan</span><strong id="statViews">0</strong></div>
 </div>
 
 <div class="panel">
@@ -229,22 +241,56 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 
 <div class="panel">
 <h2 id="editorTitle">Tambah Artikel</h2>
+
 <form id="articleForm" onsubmit="saveArticle(event)">
 <input type="hidden" id="articleId">
-<div class="field"><label for="articleTitle">Judul Artikel</label><input id="articleTitle" required maxlength="180"></div>
+
+<div class="field">
+<label for="articleTitle">Judul Artikel</label>
+<input id="articleTitle" required maxlength="180">
+</div>
+
 <div class="field">
 <label for="articleCategory">Kategori</label>
 <select id="articleCategory">
-<option>Nasional</option><option>Internasional</option><option>Transfer</option>
-<option>Liga Inggris</option><option>La Liga</option><option>Serie A</option>
-<option>Champions League</option><option>Lainnya</option>
+<option>Nasional</option>
+<option>Internasional</option>
+<option>Transfer</option>
+<option>Liga Inggris</option>
+<option>La Liga</option>
+<option>Serie A</option>
+<option>Champions League</option>
+<option>Lainnya</option>
 </select>
 </div>
-<div class="field"><label for="articleImage">URL Gambar</label><input id="articleImage" type="url" placeholder="https://..."></div>
-<div class="field"><label for="articleSource">Nama Sumber</label><input id="articleSource" maxlength="100" placeholder="Nama media sumber"></div>
-<div class="field"><label for="articleSourceUrl">URL Sumber</label><input id="articleSourceUrl" type="url" placeholder="https://..."></div>
-<div class="field"><label for="articleContent">Isi Artikel</label><textarea id="articleContent" required></textarea></div>
-<div class="field"><label><input id="articleBreaking" type="checkbox" style="width:auto"> Tandai sebagai berita utama / breaking news</label></div>
+
+<div class="field">
+<label for="articleImage">URL Gambar</label>
+<input id="articleImage" type="url" placeholder="https://...">
+</div>
+
+<div class="field">
+<label for="articleSource">Nama Sumber</label>
+<input id="articleSource" maxlength="100" placeholder="Nama media sumber">
+</div>
+
+<div class="field">
+<label for="articleSourceUrl">URL Sumber</label>
+<input id="articleSourceUrl" type="url" placeholder="https://...">
+</div>
+
+<div class="field">
+<label for="articleContent">Isi Artikel</label>
+<textarea id="articleContent" required placeholder="Tulis atau perbaiki isi berita di sini..."></textarea>
+</div>
+
+<div class="field">
+<label>
+<input id="articleBreaking" type="checkbox" style="width:auto">
+Tandai sebagai berita utama / breaking news
+</label>
+</div>
+
 <div class="modal-actions">
 <button type="button" class="btn btn-light" onclick="resetArticleForm()">Bersihkan</button>
 <button type="submit" class="btn btn-gold">Simpan sebagai Draft</button>
@@ -255,23 +301,44 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 
 <div class="panel">
 <div class="section-head">
-<div><h2>Kelola Artikel</h2><p>Periksa draft sebelum menerbitkannya.</p></div>
+<div>
+<h2>Kelola Artikel</h2>
+<p>Edit, benahi, dan terbitkan artikel setelah diperiksa.</p>
+</div>
 <button class="btn btn-light" onclick="loadAdminData()">Muat Ulang</button>
 </div>
+
 <div class="table-wrap">
 <table>
-<thead><tr><th>Judul</th><th>Kategori</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead>
-<tbody id="adminArticles"><tr><td colspan="5">Memuat artikel...</td></tr></tbody>
+<thead>
+<tr>
+<th>Judul</th>
+<th>Kategori</th>
+<th>Status</th>
+<th>Tanggal</th>
+<th>Aksi</th>
+</tr>
+</thead>
+<tbody id="adminArticles">
+<tr><td colspan="5">Memuat artikel...</td></tr>
+</tbody>
 </table>
 </div>
 </div>
 
 <div class="panel">
 <h2>Ambil Berita Otomatis</h2>
-<p class="notice">Fitur ini memanggil Supabase Edge Function <code>rapid-worker</code>. Artikel yang berhasil diambil akan dimasukkan sebagai draft untuk diperiksa admin.</p>
-<button class="btn btn-gold" onclick="fetchAutomaticNews()">Ambil Berita Sekarang</button>
-<p id="fetchStatus" class="notice"></p>
+<p class="notice">
+Ambil maksimal 5 berita melalui Supabase Edge Function
+<code>rapid-worker</code>. Semua berita akan disimpan sebagai draft.
+Admin dapat mengedit dan membenahi isi berita sebelum menerbitkannya.
+</p>
+<button id="fetchNewsButton" class="btn btn-gold" onclick="fetchAutomaticNews()">
+Ambil Maksimal 5 Berita
+</button>
+<p id="fetchStatus" class="notice" aria-live="polite"></p>
 </div>
+
 </div>
 </section>
 
@@ -279,8 +346,14 @@ main,.admin-wrap{padding-left:15px;padding-right:15px}
 <div class="modal">
 <h2>Login Admin</h2>
 <form onsubmit="loginAdmin(event)">
-<div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required autocomplete="username"></div>
-<div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+<div class="field">
+<label for="loginEmail">Email</label>
+<input id="loginEmail" type="email" required autocomplete="username">
+</div>
+<div class="field">
+<label for="loginPassword">Password</label>
+<input id="loginPassword" type="password" required autocomplete="current-password">
+</div>
 <p id="loginError" class="notice"></p>
 <div class="modal-actions">
 <button type="button" class="btn btn-light" onclick="closeLogin()">Batal</button>
@@ -309,11 +382,11 @@ const db = window.supabase.createClient(
   SUPABASE_ANON_KEY,
   {
     auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      storage: window.localStorage,
-      storageKey: "bolaterkini-admin-session"
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true,
+      storage:window.localStorage,
+      storageKey:"bolaterkini-admin-session"
     }
   }
 );
@@ -323,21 +396,26 @@ let articles = [];
 let adminArticlesCache = [];
 let currentArticle = null;
 let adminCheckPromise = null;
-
-/* Variabel refresh statistik */
 let analyticsTimer = null;
 let analyticsLoading = false;
+let fetchingAutomaticNews = false;
 
 const $ = id => document.getElementById(id);
 
-const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g,c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
 
 function safeUrl(value) {
   try {
-    const u = new URL(value);
-    return ["http:","https:"].includes(u.protocol) ? u.href : "";
+    const url = new URL(value);
+    return ["http:","https:"].includes(url.protocol) ? url.href : "";
   } catch {
     return "";
   }
@@ -345,10 +423,15 @@ function safeUrl(value) {
 
 function formatDate(value) {
   if (!value) return "";
-  const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString("id-ID", {
-    day:"numeric",month:"short",year:"numeric"
-  });
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime())
+    ? ""
+    : date.toLocaleDateString("id-ID",{
+        day:"numeric",
+        month:"short",
+        year:"numeric"
+      });
 }
 
 function toggleNav() {
@@ -363,7 +446,6 @@ function updateHeader() {
   $("navActions").innerHTML = `
     <a class="nav-link active" href="#" onclick="showHome();closeNav();return false">BERANDA</a>
     <a class="nav-link" href="#newsSection" onclick="closeNav()">BERITA</a>
-    <a class="nav-link" href="#newsSection" onclick="closeNav()">LIGA</a>
     ${isAdmin
       ? `<button class="btn btn-gold" onclick="closeNav();showAdmin()">Dashboard</button>`
       : `<button class="btn btn-outline" onclick="closeNav();openLogin()">Login Admin</button>`
@@ -371,12 +453,16 @@ function updateHeader() {
   `;
 }
 
+/* ==========================
+   AUTH ADMIN
+========================== */
+
 async function checkAdmin() {
   if (adminCheckPromise) return adminCheckPromise;
 
   adminCheckPromise = (async () => {
     try {
-      const { data, error } = await db.auth.getSession();
+      const {data,error} = await db.auth.getSession();
 
       if (error || !data.session) {
         isAdmin = false;
@@ -389,15 +475,16 @@ async function checkAdmin() {
         return true;
       }
 
-      const { data:allowed, error:adminError } =
+      const {data:allowed,error:adminError} =
         await db.rpc("is_bolaterkini_admin");
 
       isAdmin = !adminError && allowed === true;
       updateHeader();
+
       return isAdmin;
 
-    } catch (error) {
-      console.error("Pemeriksaan admin gagal:",error);
+    } catch(error) {
+      console.error(error);
       isAdmin = false;
       updateHeader();
       return false;
@@ -410,10 +497,9 @@ async function checkAdmin() {
 }
 
 async function showHome() {
-  /* Hentikan refresh saat meninggalkan dashboard */
   stopAnalyticsRefresh();
-
   closeNav();
+
   $("adminPage").classList.add("hidden");
   $("publicPage").classList.remove("hidden");
 
@@ -433,9 +519,7 @@ async function showAdmin() {
     return;
   }
 
-  const allowed = await checkAdmin();
-
-  if (!allowed) {
+  if (!await checkAdmin()) {
     alert("Akun ini tidak memiliki akses admin.");
     showHome();
     return;
@@ -475,12 +559,11 @@ async function loginAdmin(event) {
   }
 
   isAdmin = false;
-  const allowed = await checkAdmin();
 
-  if (!allowed) {
+  if (!await checkAdmin()) {
     await db.auth.signOut();
     $("loginError").textContent =
-      "Akun berhasil masuk, tetapi belum terdaftar sebagai admin.";
+      "Akun belum terdaftar sebagai admin.";
     return;
   }
 
@@ -501,11 +584,16 @@ async function logoutAdmin() {
 
   isAdmin = false;
   updateHeader();
-  showHome();
+  await showHome();
 }
 
+/* ==========================
+   BERITA PUBLIK
+========================== */
+
 async function loadPublicArticles() {
-  $("newsGrid").innerHTML = `<div class="empty">Memuat berita...</div>`;
+  $("newsGrid").innerHTML =
+    `<div class="empty">Memuat berita...</div>`;
 
   const {data,error} = await db.from("articles")
     .select("*")
@@ -513,9 +601,9 @@ async function loadPublicArticles() {
     .order("created_at",{ascending:false});
 
   if (error) {
-    console.error("Gagal memuat berita:",error);
+    console.error(error);
     $("newsGrid").innerHTML =
-      `<div class="empty">Berita belum dapat dimuat. Periksa koneksi dan akses database.</div>`;
+      `<div class="empty">Berita belum dapat dimuat.</div>`;
     return;
   }
 
@@ -547,6 +635,7 @@ function renderArticles() {
 
   $("newsGrid").innerHTML = filtered.map(a => {
     const image = safeUrl(a.image_url);
+
     const excerpt = String(a.content || "")
       .replace(/<[^>]*>/g," ")
       .slice(0,145);
@@ -557,18 +646,29 @@ function renderArticles() {
           ? `<img class="news-image" src="${escapeHTML(image)}" alt="${escapeHTML(a.title)}" loading="lazy" onerror="this.style.display='none'">`
           : `<div class="news-image" style="display:grid;place-items:center;color:#7d8ba0">BolaTerkini</div>`
         }
+
         <div class="news-body">
           <span class="category">${escapeHTML(a.category || "Berita")}</span>
-          ${a.is_breaking ? `<span class="category" style="background:#fee8e8;color:#a52b2b;margin-left:5px">Breaking</span>` : ""}
+
+          ${a.is_breaking
+            ? `<span class="category" style="background:#fee8e8;color:#a52b2b;margin-left:5px">Breaking</span>`
+            : ""
+          }
+
           <h3>${escapeHTML(a.title)}</h3>
           <p>${escapeHTML(excerpt)}${excerpt.length >= 145 ? "..." : ""}</p>
+
           <div class="news-meta">
-            <span>BolaTerkini · Sumber: ${escapeHTML(a.source_name || "Tidak dicantumkan")}</span>
+            <span>BolaTerkini · ${escapeHTML(a.source_name || "Sumber berita")}</span>
             <span>${formatDate(a.created_at)}</span>
           </div>
-          <button class="read-more" onclick="openArticle('${String(a.id).replace(/'/g,"")}')">Baca selengkapnya →</button>
+
+          <button class="read-more" onclick="openArticle('${escapeHTML(a.id)}')">
+            Baca selengkapnya →
+          </button>
         </div>
-      </article>`;
+      </article>
+    `;
   }).join("");
 }
 
@@ -583,14 +683,33 @@ async function openArticle(id) {
 
   $("articleDetail").innerHTML = `
     <span class="category">${escapeHTML(a.category || "Berita")}</span>
-    <h2 style="font-size:27px;line-height:1.3;margin:14px 0">${escapeHTML(a.title)}</h2>
+
+    <h2 style="font-size:27px;line-height:1.3;margin:14px 0">
+      ${escapeHTML(a.title)}
+    </h2>
+
     <p class="notice">
       ${formatDate(a.created_at)} · BolaTerkini ·
       Sumber: ${escapeHTML(a.source_name || "Tidak dicantumkan")}
     </p>
-    ${image ? `<img src="${escapeHTML(image)}" alt="" style="width:100%;max-height:340px;object-fit:cover;border-radius:10px;margin:12px 0">` : ""}
-    <div style="white-space:pre-wrap;line-height:1.8;color:#34445b">${escapeHTML(a.content || "")}</div>
-    ${source ? `<p class="notice" style="margin-top:18px">Sumber: <a href="${escapeHTML(source)}" target="_blank" rel="noopener noreferrer">${escapeHTML(a.source_name || "Baca sumber asli")}</a></p>` : ""}
+
+    ${image
+      ? `<img src="${escapeHTML(image)}" alt="" style="width:100%;max-height:340px;object-fit:cover;border-radius:10px;margin:12px 0">`
+      : ""
+    }
+
+    <div style="white-space:pre-wrap;line-height:1.8;color:#34445b">
+      ${escapeHTML(a.content || "")}
+    </div>
+
+    ${source
+      ? `<p class="notice" style="margin-top:18px">Sumber:
+          <a href="${escapeHTML(source)}" target="_blank" rel="noopener noreferrer">
+            ${escapeHTML(a.source_name || "Baca sumber asli")}
+          </a>
+        </p>`
+      : ""
+    }
   `;
 
   $("articleModal").classList.remove("hidden");
@@ -599,9 +718,7 @@ async function openArticle(id) {
     article_id:a.id
   });
 
-  if (error) {
-    console.warn("Pencatatan kunjungan artikel gagal:",error.message);
-  }
+  if (error) console.warn(error.message);
 }
 
 function closeArticle() {
@@ -615,29 +732,27 @@ async function shareArticle() {
   const url = location.href.split("#")[0] +
     "#artikel-" + encodeURIComponent(currentArticle.id);
 
-  const payload = {
-    title:currentArticle.title,
-    text:"Baca berita ini di BolaTerkini",
-    url
-  };
-
   try {
     if (navigator.share) {
-      await navigator.share(payload);
+      await navigator.share({
+        title:currentArticle.title,
+        text:"Baca berita ini di BolaTerkini",
+        url
+      });
     } else {
       await navigator.clipboard.writeText(url);
-      alert("Tautan artikel berhasil disalin.");
+      alert("Tautan berhasil disalin.");
     }
-  } catch(e) {
-    if (e.name !== "AbortError") {
+  } catch(error) {
+    if (error.name !== "AbortError") {
       alert("Tautan belum dapat dibagikan.");
     }
   }
 }
 
-/* ==================================================
+/* ==========================
    DASHBOARD ADMIN
-   ================================================== */
+========================== */
 
 async function loadAdminData() {
   if (!await checkAdmin()) {
@@ -661,8 +776,6 @@ async function loadAdminData() {
     adminArticlesCache.filter(a => a.is_published).length;
 
   renderAdminArticles();
-
-  /* Mulai refresh statistik otomatis */
   startAnalyticsRefresh();
 }
 
@@ -675,26 +788,43 @@ function renderAdminArticles() {
 
   $("adminArticles").innerHTML = adminArticlesCache.map(a => `
     <tr>
-      <td><strong>${escapeHTML(a.title)}</strong>${a.is_breaking ? " 🔔" : ""}</td>
+      <td>
+        <strong>${escapeHTML(a.title)}</strong>
+        ${a.is_breaking ? " 🔔" : ""}
+      </td>
+
       <td>${escapeHTML(a.category || "-")}</td>
+
       <td>
         <span class="status ${a.is_published ? "published" : "draft"}">
           ${a.is_published ? "Terbit" : "Draft"}
         </span>
       </td>
+
       <td>${formatDate(a.created_at)}</td>
+
       <td>
         <div class="mini-actions">
-          <button class="btn-light" onclick="editArticle('${String(a.id).replace(/'/g,"")}')">Edit</button>
-          <button class="btn-gold" onclick="togglePublish('${String(a.id).replace(/'/g,"")}',${!a.is_published})">
+          <button class="btn-light" onclick="editArticle('${escapeHTML(a.id)}')">
+            Edit
+          </button>
+
+          <button class="btn-gold" onclick="togglePublish('${escapeHTML(a.id)}',${!a.is_published})">
             ${a.is_published ? "Jadikan Draft" : "Terbitkan"}
           </button>
-          <button class="btn-danger" onclick="deleteArticle('${String(a.id).replace(/'/g,"")}')">Hapus</button>
+
+          <button class="btn-danger" onclick="deleteArticle('${escapeHTML(a.id)}')">
+            Hapus
+          </button>
         </div>
       </td>
     </tr>
   `).join("");
 }
+
+/* ==========================
+   FORM EDIT ARTIKEL
+========================== */
 
 function resetArticleForm() {
   $("articleForm").reset();
@@ -703,7 +833,10 @@ function resetArticleForm() {
 }
 
 function editArticle(id) {
-  const a = adminArticlesCache.find(item => String(item.id) === String(id));
+  const a = adminArticlesCache.find(item =>
+    String(item.id) === String(id)
+  );
+
   if (!a) return;
 
   $("articleId").value = a.id;
@@ -714,7 +847,11 @@ function editArticle(id) {
   $("articleSourceUrl").value = a.source_url || "";
   $("articleContent").value = a.content || "";
   $("articleBreaking").checked = !!a.is_breaking;
-  $("editorTitle").textContent = "Edit Artikel";
+
+  $("editorTitle").textContent =
+    a.is_published
+      ? "Edit Artikel Terbit"
+      : "Edit dan Benahi Draft Artikel";
 
   $("articleForm").scrollIntoView({behavior:"smooth"});
 }
@@ -765,12 +902,16 @@ async function persistArticle(published) {
   }
 
   const id = $("articleId").value;
+
   let result;
 
   if (id) {
-    result = await db.from("articles").update(payload).eq("id",id);
+    result = await db.from("articles")
+      .update(payload)
+      .eq("id",id);
   } else {
-    result = await db.from("articles").insert(payload);
+    result = await db.from("articles")
+      .insert(payload);
   }
 
   if (result.error) {
@@ -780,9 +921,11 @@ async function persistArticle(published) {
 
   alert(published
     ? "Artikel berhasil diterbitkan."
-    : "Artikel berhasil disimpan sebagai draft.");
+    : "Artikel berhasil disimpan sebagai draft."
+  );
 
   resetArticleForm();
+
   await loadAdminData();
   await loadPublicArticles();
 }
@@ -805,6 +948,7 @@ async function togglePublish(id,published) {
 
 async function deleteArticle(id) {
   if (!await checkAdmin()) return;
+
   if (!confirm("Yakin ingin menghapus artikel ini?")) return;
 
   const {error} = await db.from("articles")
@@ -816,13 +960,166 @@ async function deleteArticle(id) {
     return;
   }
 
+  resetArticleForm();
   await loadAdminData();
   await loadPublicArticles();
 }
 
-/* ==================================================
-   STATISTIK KUNJUNGAN — AUTO REFRESH 10 DETIK
-   ================================================== */
+/* ==========================
+   AMBIL MAKSIMAL 5 BERITA OTOMATIS
+========================== */
+
+async function fetchAutomaticNews() {
+  const button = $("fetchNewsButton");
+  const status = $("fetchStatus");
+
+  if (fetchingAutomaticNews) return;
+
+  fetchingAutomaticNews = true;
+
+  try {
+    if (!await checkAdmin()) {
+      status.textContent =
+        "Akses ditolak. Silakan login sebagai admin.";
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Sedang Mengambil...";
+    status.textContent = "Menghubungi rapid-worker. Maksimal 5 berita...";
+
+    const {data,error} = await db.functions.invoke(
+      "rapid-worker",
+      {
+        body:{
+          action:"fetch_news",
+          limit:5
+        }
+      }
+    );
+
+    if (error) throw error;
+
+    const incoming = Array.isArray(data)
+      ? data
+      : data?.articles || [];
+
+    if (!Array.isArray(incoming) || incoming.length === 0) {
+      status.textContent =
+        "Tidak ada artikel baru yang dikembalikan oleh rapid-worker.";
+      return;
+    }
+
+    const {data:existing,error:existingError} = await db
+      .from("articles")
+      .select("title");
+
+    if (existingError) throw existingError;
+
+    const existingTitles = new Set(
+      (existing || []).map(article =>
+        String(article.title || "").trim().toLowerCase()
+      )
+    );
+
+    const drafts = [];
+    let skipped = 0;
+
+    // Batasi hasil menjadi maksimal 5 artikel
+    for (const article of incoming.slice(0,5)) {
+      const title = String(
+        article.title || article.judul || ""
+      ).trim();
+
+      const content = String(
+        article.content ||
+        article.body ||
+        article.isi ||
+        article.description ||
+        ""
+      ).trim();
+
+      if (!title || !content) {
+        skipped++;
+        continue;
+      }
+
+      const normalizedTitle = title.toLowerCase();
+
+      if (existingTitles.has(normalizedTitle)) {
+        skipped++;
+        continue;
+      }
+
+      existingTitles.add(normalizedTitle);
+
+      drafts.push({
+        title:title.slice(0,180),
+
+        category:String(
+          article.category ||
+          article.kategori ||
+          "Lainnya"
+        ).slice(0,100),
+
+        content:content,
+
+        image_url:safeUrl(
+          article.image_url || article.image
+        ) || null,
+
+        source_name:String(
+          article.source_name ||
+          article.source ||
+          "Sumber berita"
+        ).slice(0,100),
+
+        source_url:safeUrl(
+          article.source_url ||
+          article.url
+        ) || null,
+
+        // WAJIB DRAFT: tidak langsung terbit
+        is_published:false,
+        is_breaking:false
+      });
+    }
+
+    if (drafts.length === 0) {
+      status.textContent =
+        `Tidak ada draft baru. ${skipped} artikel dilewati karena duplikat atau data tidak lengkap.`;
+      return;
+    }
+
+    const {error:insertError} = await db
+      .from("articles")
+      .insert(drafts);
+
+    if (insertError) throw insertError;
+
+    status.textContent =
+      `Berhasil! ${drafts.length} artikel masuk ke Draft. ` +
+      `${skipped} artikel dilewati. Silakan edit dan benahi sebelum diterbitkan.`;
+
+    await loadAdminData();
+
+  } catch(error) {
+    console.error("Rapid-worker error:",error);
+
+    status.textContent =
+      "Gagal mengambil berita: " +
+      (error.message || "Terjadi kesalahan.");
+  } finally {
+    fetchingAutomaticNews = false;
+
+    button.disabled = false;
+    button.textContent = "Ambil Maksimal 5 Berita";
+  }
+}
+
+/* ==========================
+   STATISTIK KUNJUNGAN
+========================== */
 
 function getLocalDateKey(value) {
   const date = new Date(value);
@@ -830,32 +1127,29 @@ function getLocalDateKey(value) {
   if (Number.isNaN(date.getTime())) return null;
 
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth()+1).padStart(2,"0");
+  const day = String(date.getDate()).padStart(2,"0");
 
   return `${year}-${month}-${day}`;
 }
 
 async function loadAnalytics() {
-  /* Cegah permintaan statistik bertumpuk */
   if (analyticsLoading) return;
 
   analyticsLoading = true;
 
   try {
-    /* Ambil jumlah seluruh kunjungan */
     const {count,error:countError} = await db
       .from("page_views")
-      .select("*", {count:"exact",head:true});
+      .select("*",{count:"exact",head:true});
 
     if (countError) throw countError;
 
     $("statViews").textContent =
       (count || 0).toLocaleString("id-ID");
 
-    /* Ambil data kunjungan selama 7 hari terakhir */
     const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate()-6);
     sevenDaysAgo.setHours(0,0,0,0);
 
     const {data,error} = await db
@@ -866,36 +1160,30 @@ async function loadAnalytics() {
 
     if (error) throw error;
 
-    const rows = data || [];
     const days = [];
 
-    for (let i = 6; i >= 0; i--) {
+    for (let i=6;i>=0;i--) {
       const date = new Date();
-      date.setDate(date.getDate() - i);
+      date.setDate(date.getDate()-i);
 
       days.push({
         key:getLocalDateKey(date),
-        label:date.toLocaleDateString("id-ID",{
-          weekday:"short"
-        }),
+        label:date.toLocaleDateString("id-ID",{weekday:"short"}),
         count:0
       });
     }
 
-    rows.forEach(row => {
-      if (!row.visited_at) return;
-
+    (data || []).forEach(row => {
       const key = getLocalDateKey(row.visited_at);
-      if (!key) return;
-
       const day = days.find(item => item.key === key);
+
       if (day) day.count++;
     });
 
     const max = Math.max(1,...days.map(day => day.count));
 
     $("viewsChart").innerHTML = days.map(day => {
-      const height = Math.max(3,(day.count / max) * 100);
+      const height = Math.max(3,(day.count/max)*100);
 
       return `
         <div class="bar-col" title="${day.count} kunjungan">
@@ -906,34 +1194,31 @@ async function loadAnalytics() {
       `;
     }).join("");
 
-  } catch (error) {
+  } catch(error) {
     console.error("Analytics error:",error);
 
     $("statViews").textContent = "—";
-    $("viewsChart").innerHTML = `
-      <span class="notice">
-        Gagal membaca statistik: ${escapeHTML(error.message)}
-      </span>
-    `;
+    $("viewsChart").innerHTML =
+      `<span class="notice">Gagal membaca statistik: ${escapeHTML(error.message)}</span>`;
   } finally {
     analyticsLoading = false;
   }
 }
 
-/* Mulai refresh statistik */
 function startAnalyticsRefresh() {
   stopAnalyticsRefresh();
 
-  /* Ambil data pertama kali */
   loadAnalytics();
 
-  /* Perbarui setiap 10 detik */
   analyticsTimer = setInterval(() => {
-    loadAnalytics();
+    if (!$("adminPage").classList.contains("hidden")) {
+      loadAnalytics();
+    } else {
+      stopAnalyticsRefresh();
+    }
   },10000);
 }
 
-/* Hentikan refresh statistik */
 function stopAnalyticsRefresh() {
   if (analyticsTimer !== null) {
     clearInterval(analyticsTimer);
@@ -941,88 +1226,24 @@ function stopAnalyticsRefresh() {
   }
 }
 
-/* ==================================================
-   BERITA OTOMATIS
-   ================================================== */
-
-async function fetchAutomaticNews() {
-  if (!await checkAdmin()) return;
-
-  $("fetchStatus").textContent = "Sedang mengambil berita...";
-
-  const {data,error} = await db.functions.invoke("rapid-worker",{
-    body:{action:"fetch_news"}
-  });
-
-  if (error) {
-    $("fetchStatus").textContent =
-      "Gagal mengambil berita: " + error.message +
-      ". Pastikan Edge Function rapid-worker sudah diterapkan dan dikonfigurasi.";
-    return;
-  }
-
-  const incoming = data?.articles;
-
-  if (!Array.isArray(incoming) || !incoming.length) {
-    $("fetchStatus").textContent =
-      "Tidak ada artikel baru yang dikembalikan oleh fungsi.";
-    return;
-  }
-
-  const drafts = incoming
-    .filter(a => a.title && a.content)
-    .map(a => ({
-      title:String(a.title).slice(0,180),
-      category:a.category || "Lainnya",
-      content:String(a.content),
-      image_url:safeUrl(a.image_url) || null,
-      source_name:a.source_name || "Sumber berita",
-      source_url:safeUrl(a.source_url) || null,
-      is_published:false,
-      is_breaking:false
-    }));
-
-  if (!drafts.length) {
-    $("fetchStatus").textContent =
-      "Data dari fungsi tidak memiliki judul atau isi yang valid.";
-    return;
-  }
-
-  const {error:insertError} =
-    await db.from("articles").insert(drafts);
-
-  if (insertError) {
-    $("fetchStatus").textContent =
-      "Berita berhasil diambil, tetapi gagal disimpan: " + insertError.message;
-    return;
-  }
-
-  $("fetchStatus").textContent =
-    `${drafts.length} artikel berhasil ditambahkan sebagai draft. Periksa sebelum diterbitkan.`;
-
-  await loadAdminData();
-}
-
-/* ==================================================
-   PENCATATAN KUNJUNGAN HALAMAN
-   ================================================== */
+/* ==========================
+   CATAT KUNJUNGAN
+========================== */
 
 async function recordPageView() {
-  const {error} = await db
-    .from("page_views")
-    .insert({
-      page_path:window.location.pathname,
-      visited_at:new Date().toISOString()
-    });
+  const {error} = await db.from("page_views").insert({
+    page_path:window.location.pathname,
+    visited_at:new Date().toISOString()
+  });
 
   if (error) {
     console.warn("Kunjungan tidak tercatat:",error.message);
   }
 }
 
-/* ==================================================
-   AUTENTIKASI
-   ================================================== */
+/* ==========================
+   AUTH STATE
+========================== */
 
 db.auth.onAuthStateChange((event,session) => {
   setTimeout(async () => {
@@ -1043,9 +1264,9 @@ db.auth.onAuthStateChange((event,session) => {
   },0);
 });
 
-/* ==================================================
-   INISIALISASI WEBSITE
-   ================================================== */
+/* ==========================
+   INISIALISASI
+========================== */
 
 async function initApp() {
   $("year").textContent = new Date().getFullYear();
