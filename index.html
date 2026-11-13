@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1050,6 +1049,7 @@ async function loadPublicArticles() {
     .order("created_at",{ascending:false});
 
   if (error) {
+    console.error("Gagal memuat berita:",error);
     $("newsGrid").innerHTML =
       `<div class="empty">Berita belum dapat dimuat. Periksa koneksi dan akses database.</div>`;
     return;
@@ -1152,10 +1152,13 @@ async function openArticle(id) {
 
   $("articleModal").classList.remove("hidden");
 
-  db.from("page_views").insert({article_id:a.id})
-    .then(({error}) => {
-      if (error) console.warn("Pencatatan kunjungan gagal:",error.message);
-    });
+  const {error} = await db.from("page_views").insert({
+    article_id:a.id
+  });
+
+  if (error) {
+    console.warn("Pencatatan kunjungan artikel gagal:",error.message);
+  }
 }
 
 function closeArticle() {
@@ -1365,55 +1368,95 @@ async function deleteArticle(id) {
   await loadPublicArticles();
 }
 
+/* ==================================================
+   STATISTIK KUNJUNGAN — VERSI DIPERBAIKI
+   ================================================== */
+
+function getLocalDateKey(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return null;
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 async function loadAnalytics() {
-  const {data,error} = await db.from("page_views")
+  $("statViews").textContent = "Memuat...";
+  $("viewsChart").innerHTML =
+    `<span class="notice">Memuat statistik kunjungan...</span>`;
+
+  const {data,error} = await db
+    .from("page_views")
     .select("id,visited_at")
     .order("visited_at",{ascending:false})
     .limit(10000);
 
   if (error) {
+    console.error("Analytics error:",error);
+
     $("statViews").textContent = "—";
     $("viewsChart").innerHTML =
-      `<span class="notice">Data kunjungan belum tersedia atau akses tabel ditolak.</span>`;
+      `<span class="notice">Gagal membaca statistik: ${
+        escapeHTML(error.message)
+      }</span>`;
     return;
   }
 
   const rows = data || [];
-  $("statViews").textContent = rows.length.toLocaleString("id-ID");
+
+  $("statViews").textContent =
+    rows.length.toLocaleString("id-ID");
 
   const days = [];
 
-  for (let i=6;i>=0;i--) {
-    const d = new Date();
-    d.setDate(d.getDate()-i);
-    const key = d.toLocaleDateString("en-CA");
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
 
     days.push({
-      key,
-      label:d.toLocaleDateString("id-ID",{weekday:"short"}),
+      key:getLocalDateKey(date),
+      label:date.toLocaleDateString("id-ID",{
+        weekday:"short"
+      }),
       count:0
     });
   }
 
-  rows.forEach(r => {
-    if (!r.visited_at) return;
+  rows.forEach(row => {
+    if (!row.visited_at) return;
 
-    const key = new Date(r.visited_at).toLocaleDateString("en-CA");
-    const day = days.find(x => x.key === key);
+    const key = getLocalDateKey(row.visited_at);
+    if (!key) return;
 
-    if (day) day.count++;
+    const day = days.find(item => item.key === key);
+
+    if (day) {
+      day.count++;
+    }
   });
 
-  const max = Math.max(1,...days.map(d => d.count));
+  const max = Math.max(1,...days.map(day => day.count));
 
-  $("viewsChart").innerHTML = days.map(d => `
-    <div class="bar-col" title="${d.count} kunjungan">
-      <small>${d.count}</small>
-      <div class="bar" style="height:${Math.max(3,d.count/max*100)}%"></div>
-      <small>${d.label}</small>
-    </div>
-  `).join("");
+  $("viewsChart").innerHTML = days.map(day => {
+    const height = Math.max(3,(day.count / max) * 100);
+
+    return `
+      <div class="bar-col" title="${day.count} kunjungan">
+        <small>${day.count}</small>
+        <div class="bar" style="height:${height}%"></div>
+        <small>${day.label}</small>
+      </div>
+    `;
+  }).join("");
 }
+
+/* ==================================================
+   BERITA OTOMATIS
+   ================================================== */
 
 async function fetchAutomaticNews() {
   if (!await checkAdmin()) return;
@@ -1473,6 +1516,10 @@ async function fetchAutomaticNews() {
   await loadAdminData();
 }
 
+/* ==================================================
+   PENCATATAN KUNJUNGAN HALAMAN
+   ================================================== */
+
 async function recordPageView() {
   const {error} = await db.from("page_views").insert({});
 
@@ -1480,6 +1527,10 @@ async function recordPageView() {
     console.warn("Kunjungan halaman tidak tercatat:",error.message);
   }
 }
+
+/* ==================================================
+   AUTENTIKASI
+   ================================================== */
 
 db.auth.onAuthStateChange((event,session) => {
   setTimeout(async () => {
@@ -1498,6 +1549,10 @@ db.auth.onAuthStateChange((event,session) => {
     }
   },0);
 });
+
+/* ==================================================
+   INISIALISASI WEBSITE
+   ================================================== */
 
 async function initApp() {
   $("year").textContent = new Date().getFullYear();
