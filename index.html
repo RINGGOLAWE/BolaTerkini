@@ -44,8 +44,26 @@ img{max-width:100%;display:block}
   backdrop-filter:blur(12px);border-bottom:1px solid var(--line)
 }
 .header-inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{font-size:25px;font-weight:900;letter-spacing:-1px}
-.logo span{color:var(--gold)}
+
+/* LOGO BOLATERKINI */
+.logo{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:-1px;
+  white-space:nowrap;
+}
+.logo-icon{
+  color:var(--gold);
+  font-size:32px;
+  line-height:1;
+  letter-spacing:0;
+}
+.logo-text{color:var(--text)}
+.logo-text span{color:var(--gold)}
+
 .nav{display:flex;align-items:center;gap:22px}
 .nav a{font-size:14px;color:#d2dce8;font-weight:700}
 .nav a:hover,.nav a.active{color:var(--gold)}
@@ -145,7 +163,34 @@ textarea{min-height:150px;resize:vertical}
 .form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .admin-list{display:grid;gap:10px}
 .admin-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
-.admin-item img{width:65px;height:55px;object-fit:cover;border-radius:7px}
+
+/* FOTO ARTIKEL DI DASHBOARD ADMIN */
+.admin-item-media{
+  display:grid;
+  gap:6px;
+  flex-shrink:0;
+  width:90px;
+}
+.admin-item-image-link{
+  display:block;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid var(--line);
+}
+.admin-item-media img{
+  display:block;
+  width:90px;
+  height:70px;
+  object-fit:cover;
+  border-radius:7px;
+  transition:transform .2s;
+}
+.admin-item-image-link:hover img{transform:scale(1.06)}
+.admin-item-media .btn{
+  width:100%;
+  padding:6px 4px;
+  font-size:10px;
+}
 .admin-item-info{flex:1;min-width:0}
 .admin-item-info strong{display:block;font-size:13px;overflow-wrap:anywhere}
 .admin-item-info small{color:var(--muted);font-size:11px}
@@ -204,6 +249,10 @@ textarea{min-height:150px;resize:vertical}
   .hero-side-card img{height:100%;min-height:120px;width:105px}
   .search-wrap{width:100%}
   .section-heading{align-items:flex-start;flex-direction:column}
+  .logo{font-size:21px;gap:6px}
+  .logo-icon{font-size:28px}
+  .admin-item-media{width:82px}
+  .admin-item-media img{width:82px;height:65px}
 }
 </style>
 </head>
@@ -218,7 +267,11 @@ textarea{min-height:150px;resize:vertical}
 
 <header class="header">
   <div class="container header-inner">
-    <a href="#" class="logo">BOLA<span>TERKINI</span></a>
+    <a href="#" class="logo">
+      <span class="logo-icon">⚽</span>
+      <span class="logo-text">BOLA<span>TERKINI</span></span>
+    </a>
+
     <nav class="nav" id="mainNav">
       <a href="#" class="active" onclick="filterCategory('Semua',event)">Beranda</a>
       <a href="#berita" onclick="filterCategory('Indonesia',event)">Indonesia</a>
@@ -227,6 +280,7 @@ textarea{min-height:150px;resize:vertical}
       <a href="#berita" onclick="filterCategory('Italia',event)">Italia</a>
       <a href="#berita" onclick="filterCategory('Transfer',event)">Transfer</a>
     </nav>
+
     <div class="header-actions">
       <button class="btn btn-outline" onclick="openAdmin()">Admin</button>
       <button class="menu-btn" onclick="toggleMenu()" aria-label="Buka menu">☰</button>
@@ -284,6 +338,7 @@ textarea{min-height:150px;resize:vertical}
         <h3>Berita Populer</h3>
         <div id="popularList"><div class="meta">Memuat...</div></div>
       </div>
+
       <div class="side-box">
         <h3>Kategori Berita</h3>
         <div class="category-list">
@@ -295,6 +350,7 @@ textarea{min-height:150px;resize:vertical}
           <button class="category-chip" onclick="filterCategory('Transfer')">Transfer</button>
         </div>
       </div>
+
       <div class="side-box">
         <h3>Tentang BolaTerkini</h3>
         <p class="meta">BolaTerkini menyajikan informasi sepak bola Indonesia dan dunia, mulai dari kabar klub, transfer pemain, hingga perkembangan kompetisi.</p>
@@ -333,14 +389,17 @@ textarea{min-height:150px;resize:vertical}
       <div id="loginPanel">
         <h3>Login Administrator</h3>
         <div class="notice">Gunakan akun admin yang sudah diizinkan melalui Supabase dan fungsi verifikasi admin.</div>
+
         <div class="form-group">
           <label>Email</label>
           <input type="email" id="loginEmail" autocomplete="username" placeholder="Email admin">
         </div>
+
         <div class="form-group">
           <label>Password</label>
           <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Password">
         </div>
+
         <button class="btn" onclick="loginAdmin()" id="loginButton">Masuk</button>
         <p class="meta" id="loginMessage"></p>
       </div>
@@ -380,13 +439,16 @@ textarea{min-height:150px;resize:vertical}
 
         <div class="admin-panel" id="panel-add">
           <h3 id="formTitle">Tambah Artikel Baru</h3>
+
           <form id="articleForm" onsubmit="saveArticle(event)">
             <input type="hidden" id="editArticleId">
+
             <div class="form-grid">
               <div class="form-group full">
                 <label>Judul Berita *</label>
                 <input id="articleTitle" required maxlength="180" placeholder="Masukkan judul berita">
               </div>
+
               <div class="form-group">
                 <label>Kategori *</label>
                 <select id="articleCategory" required>
@@ -395,31 +457,38 @@ textarea{min-height:150px;resize:vertical}
                   <option>Internasional</option><option>Lainnya</option>
                 </select>
               </div>
+
               <div class="form-group">
                 <label>Sumber Berita</label>
                 <input id="articleSource" maxlength="100" placeholder="Contoh: BolaTerkini">
               </div>
+
               <div class="form-group full">
                 <label>URL Gambar</label>
                 <input id="articleImage" type="url" placeholder="https://...">
               </div>
+
               <div class="form-group full">
                 <label>Upload Gambar</label>
                 <input id="articleImageFile" type="file" accept="image/png,image/jpeg,image/webp">
                 <span class="meta">Format JPG, PNG, atau WEBP. Ukuran maksimal 5 MB.</span>
               </div>
+
               <div class="form-group full">
                 <label>Link Sumber Asli</label>
                 <input id="articleSourceUrl" type="url" placeholder="https://sumber-berita.com/artikel">
               </div>
+
               <div class="form-group full">
                 <label>Isi Berita *</label>
                 <textarea id="articleContent" required placeholder="Tulis berita dengan bahasa sendiri dan cantumkan sumber informasi..."></textarea>
               </div>
+
               <div class="form-group full">
                 <label><input type="checkbox" id="articlePublished" checked style="width:auto"> Terbitkan artikel sekarang</label>
               </div>
             </div>
+
             <div class="form-actions">
               <button class="btn" type="submit" id="saveArticleButton">Simpan Artikel</button>
               <button class="btn btn-dark" type="button" onclick="resetArticleForm()">Bersihkan</button>
@@ -445,10 +514,13 @@ textarea{min-height:150px;resize:vertical}
             <div class="stat-card"><small>7 Hari</small><strong id="analyticsWeek">0</strong></div>
             <div class="stat-card"><small>Artikel Terbit</small><strong id="analyticsPublished">0</strong></div>
           </div>
+
           <div class="chart-box"><canvas id="viewsChart"></canvas></div>
           <div class="chart-box"><canvas id="categoryChart"></canvas></div>
+
           <h3>Artikel Paling Banyak Dibaca</h3>
           <div id="topArticles" class="admin-list"></div>
+
           <div class="form-actions">
             <button class="btn btn-outline" onclick="exportAnalyticsCSV()">Export CSV</button>
             <button class="btn btn-dark" onclick="loadAnalytics()">Refresh Analitik</button>
@@ -460,6 +532,7 @@ textarea{min-height:150px;resize:vertical}
 </div>
 
 <div class="toast" id="toast"></div>
+
 <script>
 // ==========================================
 // KONFIGURASI SUPABASE
@@ -553,6 +626,7 @@ function showAdminTab(tab, button) {
   document.querySelectorAll(".admin-panel").forEach(panel =>
     panel.classList.remove("active")
   );
+
   document.querySelectorAll(".admin-tab").forEach(item =>
     item.classList.remove("active")
   );
@@ -583,12 +657,16 @@ async function loadArticles() {
 
     articles = data || [];
     renderAllArticles();
+
   } catch (error) {
     console.error("Gagal memuat artikel:", error);
+
     document.getElementById("newsGrid").innerHTML =
       `<div class="empty-state">Berita belum dapat dimuat. Periksa koneksi Supabase dan kebijakan akses tabel.</div>`;
+
     document.getElementById("heroGrid").innerHTML =
       `<div class="empty-state">Berita pilihan belum tersedia.</div>`;
+
     document.getElementById("tickerText").textContent =
       "Selamat datang di BolaTerkini.";
   }
@@ -622,6 +700,7 @@ function renderHero() {
         <div class="meta">${formatDate(main.created_at)} · ${escapeHTML(main.source || "BolaTerkini")}</div>
       </div>
     </article>
+
     <div class="hero-side">
       ${side.length ? side.map(article => `
         <article class="hero-side-card" onclick="openArticle('${article.id}')">
@@ -759,6 +838,7 @@ async function openArticle(id) {
     <img class="article-image" src="${safeImage(article.image_url)}"
          alt="${escapeHTML(article.title)}"
          onerror="this.src='${FALLBACK_IMAGE}'">
+
     <div class="article-body">
       <span class="category-tag">${escapeHTML(article.category)}</span>
       <h1>${escapeHTML(article.title)}</h1>
@@ -766,8 +846,11 @@ async function openArticle(id) {
         ${formatDate(article.created_at)} ·
         ${escapeHTML(article.source || "BolaTerkini")}
       </div>
+
       <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+
       <div class="article-content">${escapeHTML(article.content)}</div>
+
       ${sourceURL ? `
         <div class="article-source">
           Sumber informasi:
@@ -829,24 +912,30 @@ async function verifyAdmin() {
       await db.auth.signOut();
       currentUser = null;
       showLoginPanel();
+
       document.getElementById("loginMessage").textContent =
         "Akun ini belum memiliki izin administrator.";
+
       return false;
     }
 
     showDashboardPanel();
+
     document.getElementById("adminIdentity").textContent =
       currentUser.email || "Administrator";
 
     await loadAdminArticles();
     await updateOverview();
+
     return true;
 
   } catch (error) {
     console.error("Verifikasi admin gagal:", error);
     showLoginPanel();
+
     document.getElementById("loginMessage").textContent =
       "Tidak dapat memverifikasi admin. Periksa RPC dan kebijakan Supabase.";
+
     return false;
   }
 }
@@ -908,8 +997,7 @@ async function logoutAdmin() {
   showLoginPanel();
   showToast("Berhasil keluar dari dashboard.");
 }
-
-// ==========================================
+  // ==========================================
 // DATA ADMIN DAN CRUD ARTIKEL
 // ==========================================
 async function loadAdminArticles() {
@@ -925,6 +1013,7 @@ async function loadAdminArticles() {
 
     if (error) throw error;
 
+    // Memuat semua artikel, termasuk yang berstatus Draft.
     adminArticles = data || [];
 
     if (!adminArticles.length) {
@@ -933,36 +1022,180 @@ async function loadAdminArticles() {
       return;
     }
 
-    target.innerHTML = adminArticles.map(article => `
-      <div class="admin-item">
-        <img src="${safeImage(article.image_url)}"
-             alt="" onerror="this.src='${FALLBACK_IMAGE}'">
-        <div class="admin-item-info">
-          <strong>${escapeHTML(article.title)}</strong>
-          <small>
-            ${escapeHTML(article.category)} · ${formatDate(article.created_at)}
-            · ${article.is_published ? "Terbit" : "Draft"}
-          </small>
+    target.innerHTML = adminArticles.map(article => {
+      const imageUrl = safeExternalURL(article.image_url);
+
+      return `
+        <div class="admin-item">
+
+          <div class="admin-item-media">
+            ${
+              imageUrl
+              ? `
+                <a
+                  class="admin-item-image-link"
+                  href="${escapeHTML(imageUrl)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Klik untuk melihat foto ukuran penuh"
+                >
+                  <img
+                    src="${escapeHTML(imageUrl)}"
+                    alt="Foto ${escapeHTML(article.title)}"
+                    onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
+                  >
+                </a>
+
+                <button
+                  class="btn btn-small btn-outline"
+                  type="button"
+                  onclick="downloadArticleImage('${article.id}')"
+                >
+                  ⬇ Unduh Foto
+                </button>
+              `
+              : `
+                <img src="${FALLBACK_IMAGE}" alt="Belum ada foto">
+                <small class="meta">Tanpa foto</small>
+              `
+            }
+          </div>
+
+          <div class="admin-item-info">
+            <strong>${escapeHTML(article.title)}</strong>
+            <small>
+              ${escapeHTML(article.category)}
+              · ${formatDate(article.created_at)}
+              · ${article.is_published ? "Terbit" : "Draft"}
+            </small>
+          </div>
+
+          <div class="admin-item-actions">
+            <button
+              class="btn btn-small btn-dark"
+              onclick="editArticle('${article.id}')"
+            >
+              Edit
+            </button>
+
+            <button
+              class="btn btn-small btn-outline"
+              onclick="togglePublish('${article.id}',${!article.is_published})"
+            >
+              ${article.is_published ? "Jadikan Draft" : "Terbitkan"}
+            </button>
+
+            <button
+              class="btn btn-small btn-danger"
+              onclick="deleteArticle('${article.id}')"
+            >
+              Hapus
+            </button>
+          </div>
+
         </div>
-        <div class="admin-item-actions">
-          <button class="btn btn-small btn-dark" onclick="editArticle('${article.id}')">Edit</button>
-          <button class="btn btn-small btn-outline" onclick="togglePublish('${article.id}',${!article.is_published})">
-            ${article.is_published ? "Jadikan Draft" : "Terbitkan"}
-          </button>
-          <button class="btn btn-small btn-danger" onclick="deleteArticle('${article.id}')">Hapus</button>
-        </div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
 
     await updateOverview();
 
   } catch (error) {
     console.error(error);
+
     target.innerHTML =
       `<div class="empty-state">Gagal memuat artikel: ${escapeHTML(error.message)}</div>`;
   }
 }
 
+// ==========================================
+// LIHAT DAN UNDUH FOTO ARTIKEL
+// ==========================================
+async function downloadArticleImage(articleId) {
+  const article = adminArticles.find(
+    item => String(item.id) === String(articleId)
+  );
+
+  if (!article || !article.image_url) {
+    showToast("Foto artikel tidak ditemukan.");
+    return;
+  }
+
+  const imageUrl = safeExternalURL(article.image_url);
+
+  if (!imageUrl) {
+    showToast("URL foto tidak valid.");
+    return;
+  }
+
+  // Tab cadangan jika server tidak mengizinkan unduhan langsung.
+  const fallbackTab = window.open("about:blank", "_blank");
+
+  try {
+    showToast("Sedang menyiapkan foto...");
+
+    const response = await fetch(imageUrl);
+
+    if (!response.ok) {
+      throw new Error("Foto tidak dapat diunduh.");
+    }
+
+    const blob = await response.blob();
+
+    if (!blob.type.startsWith("image/")) {
+      throw new Error("File yang diterima bukan gambar.");
+    }
+
+    const objectUrl = URL.createObjectURL(blob);
+
+    const safeName = String(article.title || "foto-artikel")
+      .replace(/[<>:"/\\|?*]/g, "-")
+      .replace(/\s+/g, "-")
+      .slice(0, 80);
+
+    let extension = "img";
+
+    if (blob.type === "image/png") {
+      extension = "png";
+    } else if (blob.type === "image/webp") {
+      extension = "webp";
+    } else if (blob.type === "image/jpeg") {
+      extension = "jpg";
+    }
+
+    const link = document.createElement("a");
+
+    link.href = objectUrl;
+    link.download = `${safeName}.${extension}`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    if (fallbackTab) fallbackTab.close();
+
+    setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+    }, 30000);
+
+    showToast("Foto berhasil diunduh.");
+
+  } catch (error) {
+    console.error("Unduh foto gagal:", error);
+
+    // Jika CORS membatasi unduhan, buka gambar agar bisa disimpan manual.
+    if (fallbackTab) {
+      fallbackTab.location.href = imageUrl;
+    } else {
+      window.open(imageUrl, "_blank", "noopener");
+    }
+
+    showToast("Foto dibuka di tab baru. Simpan foto dari sana.");
+  }
+}
+
+// ==========================================
+// FORM ARTIKEL
+// ==========================================
 function resetArticleForm() {
   document.getElementById("articleForm").reset();
   document.getElementById("editArticleId").value = "";
@@ -989,6 +1222,7 @@ function editArticle(id) {
   document.getElementById("saveArticleButton").textContent = "Simpan Perubahan";
 
   showAdminTab("add");
+
   document.querySelectorAll(".admin-tab").forEach(button => {
     button.classList.toggle(button.textContent.includes("Tambah"), false);
   });
@@ -998,6 +1232,7 @@ async function uploadArticleImage(file) {
   if (!file) return null;
 
   const allowedTypes = ["image/jpeg","image/png","image/webp"];
+
   if (!allowedTypes.includes(file.type)) {
     throw new Error("Format gambar harus JPG, PNG, atau WEBP.");
   }
@@ -1049,12 +1284,14 @@ async function saveArticle(event) {
   }
 
   const sourceUrl = sourceUrlInput ? safeExternalURL(sourceUrlInput) : null;
+
   if (sourceUrlInput && !sourceUrl) {
     showToast("Link sumber harus berupa URL HTTP atau HTTPS yang valid.");
     return;
   }
 
   let imageUrl = imageInput ? safeExternalURL(imageInput) : null;
+
   if (imageInput && !imageUrl) {
     showToast("URL gambar tidak valid.");
     return;
@@ -1091,15 +1328,18 @@ async function saveArticle(event) {
     if (result.error) throw result.error;
 
     showToast(editId ? "Artikel berhasil diperbarui." : "Artikel berhasil ditambahkan.");
+
     resetArticleForm();
 
     await loadAdminArticles();
     await loadArticles();
+
     showAdminTab("manage");
 
   } catch (error) {
     console.error(error);
     showToast("Gagal menyimpan: " + error.message);
+
   } finally {
     button.disabled = false;
     button.textContent = editId ? "Simpan Perubahan" : "Simpan Artikel";
@@ -1115,6 +1355,7 @@ async function togglePublish(id,published) {
     if (error) throw error;
 
     showToast(published ? "Artikel diterbitkan." : "Artikel dijadikan draft.");
+
     await loadAdminArticles();
     await loadArticles();
 
@@ -1134,6 +1375,7 @@ async function deleteArticle(id) {
     if (error) throw error;
 
     showToast("Artikel berhasil dihapus.");
+
     await loadAdminArticles();
     await loadArticles();
 
@@ -1164,16 +1406,19 @@ async function fetchAutomaticNews() {
       data?.message || "Proses pengambilan berita selesai.";
 
     showToast("Permintaan berita otomatis berhasil dikirim.");
+
     await loadAdminArticles();
     await loadArticles();
 
   } catch (error) {
     console.error(error);
+
     status.textContent =
       "Gagal menjalankan berita otomatis: " + error.message +
       ". Pastikan Edge Function rapid-worker sudah tersedia.";
 
     showToast("Fungsi berita otomatis belum berhasil dijalankan.");
+
   } finally {
     button.disabled = false;
     button.textContent = "Ambil Berita Otomatis";
@@ -1197,8 +1442,10 @@ async function updateOverview() {
       .select("*",{ count:"exact",head:true });
 
     if (error) throw error;
+
     document.getElementById("statViews").textContent =
       Number(count || 0).toLocaleString("id-ID");
+
   } catch (_) {
     document.getElementById("statViews").textContent = "-";
   }
@@ -1223,6 +1470,7 @@ async function loadAnalytics() {
     const now = new Date();
     const today = new Date(now.getFullYear(),now.getMonth(),now.getDate());
     const weekAgo = new Date(today);
+
     weekAgo.setDate(weekAgo.getDate() - 6);
 
     const todayViews = views.filter(view =>
@@ -1235,10 +1483,13 @@ async function loadAnalytics() {
 
     document.getElementById("analyticsTotal").textContent =
       views.length.toLocaleString("id-ID");
+
     document.getElementById("analyticsToday").textContent =
       todayViews.length.toLocaleString("id-ID");
+
     document.getElementById("analyticsWeek").textContent =
       weekViews.length.toLocaleString("id-ID");
+
     document.getElementById("analyticsPublished").textContent =
       adminArticles.filter(item => item.is_published).length;
 
@@ -1251,6 +1502,7 @@ async function loadAnalytics() {
 
   } catch (error) {
     console.error("Analitik gagal:",error);
+
     document.getElementById("topArticles").innerHTML =
       `<div class="empty-state">Data analitik belum dapat dimuat. Periksa tabel article_views dan kebijakannya.</div>`;
   }
@@ -1262,8 +1514,15 @@ function renderViewsChart(views) {
 
   for (let i=6;i>=0;i--) {
     const date = new Date();
+
     date.setDate(date.getDate()-i);
-    const start = new Date(date.getFullYear(),date.getMonth(),date.getDate());
+
+    const start = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
     const end = new Date(start);
     end.setDate(end.getDate()+1);
 
@@ -1297,10 +1556,19 @@ function renderViewsChart(views) {
     options:{
       responsive:true,
       maintainAspectRatio:false,
-      plugins:{ legend:{ labels:{ color:"#dce5ef" } } },
+      plugins:{
+        legend:{ labels:{ color:"#dce5ef" } }
+      },
       scales:{
-        x:{ ticks:{ color:"#9aabc0" },grid:{ color:"rgba(255,255,255,.05)" } },
-        y:{ beginAtZero:true,ticks:{ color:"#9aabc0",precision:0 },grid:{ color:"rgba(255,255,255,.05)" } }
+        x:{
+          ticks:{ color:"#9aabc0" },
+          grid:{ color:"rgba(255,255,255,.05)" }
+        },
+        y:{
+          beginAtZero:true,
+          ticks:{ color:"#9aabc0",precision:0 },
+          grid:{ color:"rgba(255,255,255,.05)" }
+        }
       }
     }
   });
@@ -1334,7 +1602,12 @@ function renderCategoryChart() {
     options:{
       responsive:true,
       maintainAspectRatio:false,
-      plugins:{ legend:{ position:"bottom",labels:{ color:"#dce5ef" } } }
+      plugins:{
+        legend:{
+          position:"bottom",
+          labels:{ color:"#dce5ef" }
+        }
+      }
     }
   });
 }
@@ -1412,9 +1685,14 @@ async function exportAnalyticsCSV() {
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
+
     link.href = url;
     link.download = "analitik-bolaterkini.csv";
+
+    document.body.appendChild(link);
     link.click();
+    link.remove();
+
     URL.revokeObjectURL(url);
 
     showToast("File CSV berhasil dibuat.");
@@ -1429,7 +1707,10 @@ async function exportAnalyticsCSV() {
 // ==========================================
 document.getElementById("todayDate").textContent =
   new Date().toLocaleDateString("id-ID",{
-    weekday:"long",day:"numeric",month:"long",year:"numeric"
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric"
   });
 
 document.getElementById("year").textContent =
