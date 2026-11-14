@@ -1,0 +1,415 @@
+PATCH ANALITIK BOLATERKINI
+=========================
+
+Perubahan ini menambahkan:
+- Grafik pengunjung harian dengan filter 7 hari / 30 hari / 12 bulan.
+- Kartu total tayangan, hari ini, rata-rata harian, dan artikel terbit.
+- 5 artikel paling banyak dibaca.
+- Statistik kategori berdasarkan tayangan.
+- Jam dan hari paling ramai.
+- Aktivitas tayangan terbaru.
+- Ekspor data tayangan ke CSV.
+
+PENTING:
+Data grafik dan statistik berasal dari tabel article_views yang sudah dipakai kode lama.
+Angka pengunjung pada patch ini sebenarnya adalah JUMLAH TAYANGAN artikel (page views),
+bukan pengunjung unik. Untuk menghitung pengunjung unik perlu menambahkan visitor_id
+anonim dan kebijakan database tambahan.
+
+LANGKAH 1 — Tambahkan Chart.js di bagian <head>
+Letakkan setelah script Supabase yang sudah ada:
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+LANGKAH 2 — Tambahkan CSS berikut di dalam <style>
+Letakkan sebelum bagian @media:
+
+.analytics-toolbar{
+ display:flex;align-items:center;justify-content:space-between;
+ flex-wrap:wrap;gap:10px;margin:14px 0
+}
+.analytics-toolbar select{
+ border:1px solid var(--line);border-radius:7px;padding:9px 11px;
+ background:white;color:var(--text);font-size:12px
+}
+.analytics-panel{
+ background:white;border:1px solid var(--line);border-radius:10px;
+ padding:16px;margin:15px 0;box-shadow:var(--shadow)
+}
+.analytics-panel h4{font-size:14px;color:var(--navy);margin-bottom:4px}
+.analytics-subtitle{font-size:11px;color:var(--muted);margin-bottom:13px}
+.analytics-chart-wrap{height:290px;position:relative}
+.analytics-stat-icon{
+ width:34px;height:34px;border-radius:8px;background:#fff2d4;
+ color:var(--gold2);display:grid;place-items:center;font-size:17px;
+ float:right
+}
+.analytics-stat-card strong{font-size:25px}
+.analytics-columns{
+ display:grid;grid-template-columns:1fr 1fr;gap:15px
+}
+.analytics-row{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:10px 0;border-bottom:1px solid var(--line);font-size:12px
+}
+.analytics-row:last-child{border-bottom:0}
+.analytics-row-title{min-width:0;overflow-wrap:anywhere;font-weight:bold}
+.analytics-row-value{white-space:nowrap;color:var(--gold2);font-weight:bold}
+.analytics-bar{
+ height:7px;background:#edf0f5;border-radius:20px;overflow:hidden;margin-top:6px
+}
+.analytics-bar span{
+ display:block;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));
+ border-radius:20px
+}
+.analytics-empty{padding:20px;text-align:center;color:var(--muted);font-size:12px}
+.analytics-actions{display:flex;gap:8px;flex-wrap:wrap}
+.analytics-actions button{padding:9px 12px}
+.analytics-table-wrap{overflow-x:auto}
+.analytics-table{width:100%;border-collapse:collapse;font-size:12px}
+.analytics-table th,.analytics-table td{
+ text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)
+}
+.analytics-table th{color:var(--muted);font-size:10px;text-transform:uppercase}
+@media(max-width:650px){
+ .analytics-columns{grid-template-columns:1fr}
+ .analytics-chart-wrap{height:240px}
+ .analytics-panel{padding:12px}
+ .analytics-toolbar>*{flex:1}
+}
+
+
+LANGKAH 3 — Ganti SELURUH section analyticsTab yang lama
+Cari:
+<section class="admin-section" id="analyticsTab">
+...
+</section>
+
+Ganti dengan:
+
+<section class="admin-section" id="analyticsTab">
+ <h3>Analitik Pengunjung</h3>
+ <p class="meta">Pantau tayangan artikel dan performa konten BolaTerkini.</p>
+
+ <div class="analytics-toolbar">
+  <label for="analyticsPeriod" style="font-size:12px;font-weight:bold">Periode grafik</label>
+  <select id="analyticsPeriod" onchange="loadAnalytics()">
+   <option value="7">7 hari terakhir</option>
+   <option value="30" selected>30 hari terakhir</option>
+   <option value="365">12 bulan terakhir</option>
+  </select>
+  <div class="analytics-actions">
+   <button class="secondary-btn" onclick="exportAnalyticsCSV()">UNDUH CSV</button>
+   <button class="primary-btn" onclick="loadAnalytics()">↻ REFRESH</button>
+  </div>
+ </div>
+
+ <div class="stats-grid">
+  <div class="stat-card analytics-stat-card">
+   <span>Total tayangan</span><div class="analytics-stat-icon">◉</div>
+   <strong id="viewTotal">—</strong>
+  </div>
+  <div class="stat-card analytics-stat-card">
+   <span>Tayangan hari ini</span><div class="analytics-stat-icon">▣</div>
+   <strong id="viewToday">—</strong>
+  </div>
+  <div class="stat-card analytics-stat-card">
+   <span>Rata-rata per hari</span><div class="analytics-stat-icon">⌁</div>
+   <strong id="viewAverage">—</strong>
+  </div>
+  <div class="stat-card analytics-stat-card">
+   <span>Artikel diterbitkan</span><div class="analytics-stat-icon">▤</div>
+   <strong id="viewPublished">—</strong>
+  </div>
+ </div>
+
+ <div id="analyticsMessage" class="notice">Memuat data analitik...</div>
+
+ <div class="analytics-panel">
+  <h4>Grafik Pengunjung Harian</h4>
+  <p class="analytics-subtitle">Jumlah tayangan artikel per hari berdasarkan periode pilihan.</p>
+  <div class="analytics-chart-wrap"><canvas id="visitorChart" aria-label="Grafik tayangan harian"></canvas></div>
+ </div>
+
+ <div class="analytics-columns">
+  <div class="analytics-panel">
+   <h4>5 Artikel Terpopuler</h4>
+   <p class="analytics-subtitle">Artikel dengan jumlah tayangan tertinggi.</p>
+   <div id="topViewed"><div class="analytics-empty">Memuat data...</div></div>
+  </div>
+  <div class="analytics-panel">
+   <h4>Statistik Kategori</h4>
+   <p class="analytics-subtitle">Perbandingan tayangan menurut kategori artikel.</p>
+   <div id="categoryAnalytics"><div class="analytics-empty">Memuat data...</div></div>
+  </div>
+  <div class="analytics-panel">
+   <h4>Waktu Pengunjung Ramai</h4>
+   <p class="analytics-subtitle">Berdasarkan jam dan hari pencatatan tayangan.</p>
+   <div id="busyAnalytics"><div class="analytics-empty">Memuat data...</div></div>
+  </div>
+  <div class="analytics-panel">
+   <h4>Aktivitas Terbaru</h4>
+   <p class="analytics-subtitle">Tayangan artikel terakhir yang tercatat.</p>
+   <div id="recentAnalytics"><div class="analytics-empty">Memuat data...</div></div>
+  </div>
+ </div>
+ <p class="meta">Catatan: satu tayangan tercatat saat pembaca membuka detail artikel. Data ini bukan jumlah orang unik.</p>
+</section>
+
+
+LANGKAH 4 — Ganti fungsi loadAnalytics() lama dan tambahkan fungsi berikut
+Cari komentar:
+ /* ANALITIK PENGUNJUNG */
+
+Ganti fungsi loadAnalytics() lama dengan semua kode berikut.
+Jangan hapus fungsi recordArticleView() yang berada sebelumnya.
+
+let visitorChartInstance = null;
+let analyticsRowsCache = [];
+
+function formatNumber(value){
+ return Number(value||0).toLocaleString("id-ID");
+}
+function getArticleTitle(articleId){
+ const article=adminArticles.find(x=>String(x.id)===String(articleId));
+ return article?.title||"Artikel telah dihapus / tidak ditemukan";
+}
+function getArticleCategory(articleId){
+ const article=adminArticles.find(x=>String(x.id)===String(articleId));
+ return article?.category||"Lainnya";
+}
+function dayKey(date){
+ const d=new Date(date);
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function shortDate(date){
+ return new Date(date).toLocaleDateString("id-ID",{day:"numeric",month:"short"});
+}
+function renderVisitorChart(rows,period){
+ const canvas=document.getElementById("visitorChart");
+ if(!canvas)return;
+
+ const now=new Date();
+ let labels=[],counts={};
+
+ if(period===365){
+  for(let i=11;i>=0;i--){
+   const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+   const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+   labels.push({key,label:d.toLocaleDateString("id-ID",{month:"short",year:"2-digit"})});
+   counts[key]=0;
+  }
+  rows.forEach(row=>{
+   const d=new Date(row.viewed_at);
+   const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+   if(Object.prototype.hasOwnProperty.call(counts,key))counts[key]++;
+  });
+ }else{
+  const days=period;
+  for(let i=days-1;i>=0;i--){
+   const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+   const key=dayKey(d);
+   labels.push({key,label:shortDate(d)});
+   counts[key]=0;
+  }
+  rows.forEach(row=>{
+   const key=dayKey(row.viewed_at);
+   if(Object.prototype.hasOwnProperty.call(counts,key))counts[key]++;
+  });
+ }
+
+ if(visitorChartInstance)visitorChartInstance.destroy();
+ visitorChartInstance=new Chart(canvas,{
+  type:"line",
+  data:{
+   labels:labels.map(x=>x.label),
+   datasets:[{
+    label:"Tayangan",
+    data:labels.map(x=>counts[x.key]),
+    borderColor:"#c99a32",
+    backgroundColor:"rgba(232,185,79,.17)",
+    borderWidth:3,
+    fill:true,
+    tension:.38,
+    pointRadius:period===7?4:2,
+    pointHoverRadius:6,
+    pointBackgroundColor:"#e8b94f",
+    pointBorderColor:"#ffffff",
+    pointBorderWidth:2
+   }]
+  },
+  options:{
+   responsive:true,maintainAspectRatio:false,
+   interaction:{intersect:false,mode:"index"},
+   plugins:{
+    legend:{display:false},
+    tooltip:{displayColors:false,callbacks:{
+     label:context=>`${formatNumber(context.parsed.y)} tayangan`
+    }}
+   },
+   scales:{
+    x:{grid:{display:false},ticks:{color:"#778397",maxRotation:0,autoSkip:true,maxTicksLimit:period===365?12:10}},
+    y:{beginAtZero:true,grid:{color:"#edf0f5"},ticks:{precision:0,color:"#778397"}}
+   }
+  }
+ });
+}
+function renderTopViewed(rows){
+ const counts={};
+ rows.forEach(row=>{
+  const key=String(row.article_id);
+  counts[key]=(counts[key]||0)+1;
+ });
+ const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+ const el=document.getElementById("topViewed");
+ if(!top.length){el.innerHTML='<div class="analytics-empty">Belum ada tayangan artikel.</div>';return}
+ const max=top[0][1]||1;
+ el.innerHTML=top.map(([id,count],index)=>`
+  <div class="analytics-row">
+   <div style="min-width:0;flex:1">
+    <div class="analytics-row-title">${index+1}. ${escapeHTML(getArticleTitle(id))}</div>
+    <div class="analytics-bar"><span style="width:${Math.max(4,count/max*100)}%"></span></div>
+   </div>
+   <div class="analytics-row-value">${formatNumber(count)}</div>
+  </div>`).join("");
+}
+function renderCategoryAnalytics(rows){
+ const counts={};
+ rows.forEach(row=>{
+  const category=getArticleCategory(row.article_id);
+  counts[category]=(counts[category]||0)+1;
+ });
+ const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ const el=document.getElementById("categoryAnalytics");
+ if(!sorted.length){el.innerHTML='<div class="analytics-empty">Belum ada data kategori.</div>';return}
+ const max=sorted[0][1]||1;
+ el.innerHTML=sorted.map(([name,count])=>`
+  <div class="analytics-row">
+   <div style="min-width:0;flex:1">
+    <div class="analytics-row-title">${escapeHTML(name)}</div>
+    <div class="analytics-bar"><span style="width:${Math.max(4,count/max*100)}%"></span></div>
+   </div>
+   <div class="analytics-row-value">${formatNumber(count)}</div>
+  </div>`).join("");
+}
+function renderBusyAnalytics(rows){
+ const hours=Array(24).fill(0),weekdays=Array(7).fill(0);
+ rows.forEach(row=>{
+  const d=new Date(row.viewed_at);
+  if(!isNaN(d.getTime())){hours[d.getHours()]++;weekdays[d.getDay()]++}
+ });
+ const hourMax=Math.max(...hours),dayMax=Math.max(...weekdays);
+ const busyHour=hourMax?hours.indexOf(hourMax):null;
+ const dayNames=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+ const busyDay=dayMax?weekdays.indexOf(dayMax):null;
+ document.getElementById("busyAnalytics").innerHTML=rows.length?`
+  <div class="analytics-row"><span>Jam tersibuk</span><b class="analytics-row-value">${String(busyHour).padStart(2,"0")}.00–${String((busyHour+1)%24).padStart(2,"0")}.00 (${formatNumber(hourMax)})</b></div>
+  <div class="analytics-row"><span>Hari tersibuk</span><b class="analytics-row-value">${dayNames[busyDay]} (${formatNumber(dayMax)})</b></div>
+ `:'<div class="analytics-empty">Belum ada data waktu kunjungan.</div>';
+}
+function renderRecentAnalytics(rows){
+ const recent=[...rows].sort((a,b)=>new Date(b.viewed_at)-new Date(a.viewed_at)).slice(0,6);
+ const el=document.getElementById("recentAnalytics");
+ if(!recent.length){el.innerHTML='<div class="analytics-empty">Belum ada aktivitas terbaru.</div>';return}
+ el.innerHTML=recent.map(row=>`
+  <div class="analytics-row">
+   <div style="min-width:0;flex:1">
+    <div class="analytics-row-title">${escapeHTML(getArticleTitle(row.article_id))}</div>
+    <div class="meta">${formatDate(row.viewed_at)}</div>
+   </div>
+   <span class="analytics-row-value">${new Date(row.viewed_at).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})}</span>
+  </div>`).join("");
+}
+async function loadAnalytics(){
+ if(!isAdmin)return;
+ const message=document.getElementById("analyticsMessage");
+ message.textContent="Memuat data analitik...";
+ try{
+  const {data,error}=await supabaseClient.from("article_views")
+   .select("article_id,viewed_at")
+   .order("viewed_at",{ascending:false})
+   .limit(10000);
+  if(error)throw error;
+
+  const rows=data||[];
+  analyticsRowsCache=rows;
+  const now=new Date();
+  const todayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const todayRows=rows.filter(x=>new Date(x.viewed_at)>=todayStart);
+  const total=rows.length;
+  const average=total?Math.round(total/30):0;
+
+  document.getElementById("viewTotal").textContent=formatNumber(total);
+  document.getElementById("viewToday").textContent=formatNumber(todayRows.length);
+  document.getElementById("viewAverage").textContent=formatNumber(average);
+  document.getElementById("viewPublished").textContent=formatNumber(adminArticles.filter(x=>x.is_published).length);
+
+  const period=Number(document.getElementById("analyticsPeriod")?.value||30);
+  renderVisitorChart(rows,period);
+  renderTopViewed(rows);
+  renderCategoryAnalytics(rows);
+  renderBusyAnalytics(rows);
+  renderRecentAnalytics(rows);
+  message.textContent=`Data berhasil dimuat · ${formatNumber(total)} tayangan tercatat.`;
+ }catch(error){
+  console.error("Analytics error:",error);
+  ["viewTotal","viewToday","viewAverage","viewPublished"].forEach(id=>{
+   document.getElementById(id).textContent="—";
+  });
+  document.getElementById("analyticsMessage").textContent=
+   "Analitik belum dapat dimuat: "+error.message+
+   ". Pastikan tabel article_views memiliki kolom article_id dan viewed_at serta kebijakan akses yang benar.";
+  ["topViewed","categoryAnalytics","busyAnalytics","recentAnalytics"].forEach(id=>{
+   document.getElementById(id).innerHTML='<div class="analytics-empty">Data belum tersedia.</div>';
+  });
+  if(visitorChartInstance){visitorChartInstance.destroy();visitorChartInstance=null}
+ }
+}
+function exportAnalyticsCSV(){
+ if(!isAdmin){alert("Login admin diperlukan.");return}
+ if(!analyticsRowsCache.length){alert("Belum ada data untuk diekspor.");return}
+ const rows=[["article_id","judul_artikel","kategori","viewed_at"]];
+ analyticsRowsCache.forEach(row=>{
+  const title=getArticleTitle(row.article_id).replace(/"/g,'""');
+  const category=getArticleCategory(row.article_id).replace(/"/g,'""');
+  rows.push([row.article_id,`"${title}"`,`"${category}"`,row.viewed_at]);
+ });
+ const csv="\uFEFF"+rows.map(row=>row.join(",")).join("\r\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download=`bolaterkini-analitik-${dayKey(new Date())}.csv`;
+ document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+
+
+LANGKAH 5 — Catatan database dan pengujian
+1. Pastikan tabel article_views memiliki:
+   - id (primary key, disarankan uuid atau bigint identity)
+   - article_id (tipe data sama dengan articles.id)
+   - viewed_at (timestamptz, default now())
+
+2. Pastikan pengunjung publik boleh INSERT ke article_views, tetapi jangan memberi
+   akses publik untuk membaca semua data analitik. Admin harus membaca data melalui
+   kebijakan/RPC yang hanya mengizinkan admin. Jika SELECT saat ini sudah berhasil
+   di browser admin, pertahankan kebijakan aman tersebut.
+
+3. Jalankan tes:
+   - Buka salah satu artikel di website.
+   - Periksa apakah satu baris baru masuk ke article_views.
+   - Login admin > Analitik > Refresh.
+   - Uji filter 7 hari, 30 hari, dan 12 bulan.
+   - Uji unduh CSV.
+
+CATATAN PENTING TENTANG AKURASI:
+- Kode lama memanggil recordArticleView() saat detail artikel dibuka. Jadi data ini
+  menghitung pembukaan detail artikel, bukan semua kunjungan halaman website.
+- Kartu "Total tayangan" dan grafik memakai data article_views.
+- "Pengunjung hari ini" pada tampilan ini diberi arti tayangan hari ini, bukan orang unik.
+- Statistik kategori dihitung dengan mencocokkan article_id ke artikel yang masih ada
+  di adminArticles. Artikel yang sudah dihapus bisa masuk kategori "Lainnya".
+- Statistik jam/hari mengikuti zona waktu browser admin. Untuk laporan yang konsisten,
+  sebaiknya tetapkan zona waktu bisnis di server.
+- Query dibatasi 10.000 baris sesuai pola kode awal. Untuk website dengan trafik besar,
+  gunakan agregasi di database (RPC/view) dan pagination agar total tidak terpotong.
