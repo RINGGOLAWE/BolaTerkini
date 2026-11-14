@@ -129,6 +129,8 @@ main{padding:28px 0 50px}
 .stat-card strong{display:block;font-size:25px;color:var(--navy);margin-top:4px}
 .admin-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
 .admin-toolbar input{flex:1;min-width:180px;padding:10px;border:1px solid var(--line);border-radius:6px}
+.admin-toolbar button{padding:10px 12px}
+.draft-checkbox{width:17px;height:17px;accent-color:var(--navy);cursor:pointer}
 .empty-state,.loading{background:white;border-radius:9px;padding:30px 15px;text-align:center;color:var(--muted);font-size:13px}
 @media(max-width:800px){
 .hero-grid{grid-template-columns:1fr}.hero-main,.hero-main>img{height:290px;min-height:290px}
@@ -150,6 +152,7 @@ main{padding-top:17px}.hero-main,.hero-main>img{height:250px;min-height:250px}
 .article-body{padding:18px}.article-body h1{font-size:22px}
 .admin-body{padding:16px}.form-grid{grid-template-columns:1fr}
 .form-group.full{grid-column:auto}.stats-grid{grid-template-columns:1fr 1fr}
+.admin-toolbar button{flex:1}
 }
 </style>
 </head>
@@ -285,9 +288,18 @@ main{padding-top:17px}.hero-main,.hero-main>img{height:250px;min-height:250px}
 <div class="admin-toolbar">
 <input id="adminSearch" placeholder="Cari judul artikel..." oninput="renderAdminList()">
 <select id="adminFilter" onchange="renderAdminList()">
-<option value="all">Semua status</option><option value="published">Sudah terbit</option><option value="draft">Draft</option>
+<option value="all">Semua status</option>
+<option value="published">Sudah terbit</option>
+<option value="draft">Draft</option>
 </select>
 </div>
+
+<div class="admin-toolbar">
+<button class="secondary-btn" onclick="selectAllDrafts()">PILIH SEMUA DRAFT</button>
+<button class="danger-btn" onclick="deleteSelectedDrafts()">HAPUS DRAFT TERPILIH</button>
+<button class="danger-btn" onclick="deleteAllDrafts()">HAPUS SEMUA DRAFT</button>
+</div>
+
 <div id="adminArticleList">Memuat artikel...</div>
 </section>
 
@@ -456,7 +468,7 @@ function filterCategory(category,event){
 }
 function toggleMobileMenu(){const el=document.getElementById("mobileMenu");el.style.display=el.style.display==="block"?"none":"block"}
 
-/* PENCATATAN KUNJUNGAN - MEMERLUKAN TABEL article_views */
+/* PENCATATAN KUNJUNGAN */
 async function recordArticleView(articleId){
  try{
   await supabaseClient.from("article_views").insert({article_id:articleId});
@@ -521,25 +533,144 @@ function renderOverview(){
  <div class="admin-list-item"><b>${escapeHTML(x.title)}</b><div class="meta">${escapeHTML(x.category||"Berita")} · ${formatDate(x.created_at)}</div>
  <span class="${x.is_published?"status":"status draft"}">${x.is_published?"SUDAH TERBIT":"DRAFT"}</span></div>`).join("")||"Belum ada artikel.";
 }
+
+/* DAFTAR ARTIKEL ADMIN + CHECKBOX DRAFT */
 function renderAdminList(){
- const el=document.getElementById("adminArticleList");if(!el)return;
+ const el=document.getElementById("adminArticleList");
+ if(!el)return;
+
  const q=(document.getElementById("adminSearch")?.value||"").toLowerCase();
  const filter=document.getElementById("adminFilter")?.value||"all";
+
  const list=adminArticles.filter(x=>{
   const match=(x.title||"").toLowerCase().includes(q);
-  const status=filter==="all"||(filter==="published"&&x.is_published)||(filter==="draft"&&!x.is_published);
+  const status=filter==="all"||
+   (filter==="published"&&x.is_published)||
+   (filter==="draft"&&!x.is_published);
   return match&&status;
  });
- if(!list.length){el.innerHTML='<div class="notice">Tidak ada artikel yang cocok.</div>';return}
- el.innerHTML=list.map(x=>`<div class="admin-list-item">
- <h4>${escapeHTML(x.title)}</h4><div class="${x.is_published?"status":"status draft"}">${x.is_published?"● SUDAH TERBIT":"● DRAF"}</div>
- <div class="meta">${escapeHTML(x.category||"Berita")} · ${formatDate(x.created_at)} · ${escapeHTML(x.source||"Tanpa sumber")}</div>
- <div class="admin-list-actions">
- <button class="primary-btn" onclick="editArticle('${escapeHTML(x.id)}')">EDIT</button>
- <button class="secondary-btn" onclick="copyArticle('${escapeHTML(x.id)}')">SALIN</button>
- <button class="primary-btn" onclick="togglePublish('${escapeHTML(x.id)}',${!x.is_published})">${x.is_published?"JADIKAN DRAF":"TERBITKAN"}</button>
- <button class="danger-btn" onclick="deleteArticle('${escapeHTML(x.id)}')">HAPUS</button>
- </div></div>`).join("");
+
+ if(!list.length){
+  el.innerHTML='<div class="notice">Tidak ada artikel yang cocok.</div>';
+  return;
+ }
+
+ el.innerHTML=list.map(x=>`
+  <div class="admin-list-item">
+   ${!x.is_published?`
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:12px;font-weight:bold">
+     <input type="checkbox" class="draft-checkbox" value="${escapeHTML(x.id)}">
+     Tandai draft ini
+    </label>
+   `:""}
+
+   <h4>${escapeHTML(x.title)}</h4>
+
+   <div class="${x.is_published?"status":"status draft"}">
+    ${x.is_published?"● SUDAH TERBIT":"● DRAFT"}
+   </div>
+
+   <div class="meta">
+    ${escapeHTML(x.category||"Berita")} ·
+    ${formatDate(x.created_at)} ·
+    ${escapeHTML(x.source||"Tanpa sumber")}
+   </div>
+
+   <div class="admin-list-actions">
+    <button class="primary-btn" onclick="editArticle('${escapeHTML(x.id)}')">EDIT</button>
+    <button class="secondary-btn" onclick="copyArticle('${escapeHTML(x.id)}')">SALIN</button>
+    <button class="primary-btn" onclick="togglePublish('${escapeHTML(x.id)}',${!x.is_published})">
+     ${x.is_published?"JADIKAN DRAF":"TERBITKAN"}
+    </button>
+    <button class="danger-btn" onclick="deleteArticle('${escapeHTML(x.id)}')">HAPUS</button>
+   </div>
+  </div>
+ `).join("");
+}
+
+/* PENGHAPUSAN DRAFT */
+function selectAllDrafts(){
+ if(!isAdmin){
+  alert("Login admin diperlukan.");
+  return;
+ }
+
+ document.querySelectorAll(".draft-checkbox").forEach(box=>{
+  box.checked=true;
+ });
+}
+
+async function deleteSelectedDrafts(){
+ if(!isAdmin){
+  alert("Login admin diperlukan.");
+  return;
+ }
+
+ const selected=[
+  ...document.querySelectorAll(".draft-checkbox:checked")
+ ].map(box=>box.value);
+
+ if(!selected.length){
+  alert("Pilih minimal satu draft terlebih dahulu.");
+  return;
+ }
+
+ if(!confirm(`Yakin ingin menghapus ${selected.length} draft terpilih?`)){
+  return;
+ }
+
+ const {error}=await supabaseClient
+  .from(TABLE)
+  .delete()
+  .in("id",selected)
+  .eq("is_published",false);
+
+ if(error){
+  alert("Gagal menghapus draft: "+error.message);
+  return;
+ }
+
+ alert("Draft terpilih berhasil dihapus.");
+ await loadAdminArticles();
+ await loadArticles();
+}
+
+async function deleteAllDrafts(){
+ if(!isAdmin){
+  alert("Login admin diperlukan.");
+  return;
+ }
+
+ const draftCount=adminArticles.filter(x=>!x.is_published).length;
+
+ if(draftCount===0){
+  alert("Tidak ada draft untuk dihapus.");
+  return;
+ }
+
+ if(!confirm(
+  `PERINGATAN!\n\nKamu akan menghapus ${draftCount} draft.\n\nArtikel yang sudah terbit tidak akan dihapus.\n\nLanjutkan?`
+ )){
+  return;
+ }
+
+ if(!confirm("Konfirmasi terakhir: hapus SEMUA draft?")){
+  return;
+ }
+
+ const {error}=await supabaseClient
+  .from(TABLE)
+  .delete()
+  .eq("is_published",false);
+
+ if(error){
+  alert("Gagal menghapus semua draft: "+error.message);
+  return;
+ }
+
+ alert("Semua draft berhasil dihapus. Artikel terbit tetap aman.");
+ await loadAdminArticles();
+ await loadArticles();
 }
 
 /* SIMPAN DAN EDIT ARTIKEL */
